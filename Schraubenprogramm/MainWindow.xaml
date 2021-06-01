@@ -1,0 +1,739 @@
+﻿<Window x:Class="Schraubenprogramm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Schraubenprogramm"
+        mc:Ignorable="d"
+        Title="KM-Schraubentechnik GmbH und CoKG" Height="450" Width="800">
+
+
+    <!--
+    HAUPTPROGRAMM -->
+
+    <Grid Margin="0,0,0,0" Background="CadetBlue">
+        <!--Hauptgitter erzeugen -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="33*"></ColumnDefinition>
+            <ColumnDefinition Width="43*"></ColumnDefinition>
+            <ColumnDefinition Width="122*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100*"></RowDefinition>
+            <RowDefinition Height="330*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!-- Header-->
+        <Image x:Name="im_Begrüßung" Source="Begrüßung.png" Margin="107,20,-24,20" Grid.ColumnSpan="3" Grid.RowSpan="2" Visibility="Visible" />
+
+
+
+        <!-- Infotext-->
+        <Label x:Name="lbl_Infotext" Grid.Column="2" Margin="213,6,10,64" RenderTransformOrigin="0.5,0.5" Content="" FontSize="11" FontStyle="Oblique"/>
+
+
+        <!-- Logo definieren-->
+        <Image x:Name="im_Logo" Grid.Column="0" Grid.Row="0" Margin="5,0,5,312" Source="Screen.png" Grid.RowSpan="2" Visibility="Hidden"/>
+
+        <!-- Hauptauswahl TreeView-->
+        <TreeView Grid.Row="1" Grid.Column="0" Margin="5,10,5,10">
+            <TreeViewItem x:Name="tvi_Normteile" Margin="2,10,2,5" Header="Normteile" MouseDoubleClick="tvi_Normteile_MouseDoubleClick" ></TreeViewItem>
+            <TreeViewItem Margin="2,0,2,5" Header="Anpassung">
+                <TreeViewItem x:Name="tvi_AnVierkant" Header="Vierkant" Margin="-15,4,0,0" MouseDoubleClick="tvi_AnVierkant_MouseDoubleClick" ></TreeViewItem>
+                <TreeViewItem x:Name="tvi_AnSechkant" Header="Sechskant" Margin="-15,4,0,0" MouseDoubleClick="tvi_AnSechkant_MouseDoubleClick"></TreeViewItem>
+                <TreeViewItem x:Name="tvi_AnInnensechskant" Header="Innensechskant" Margin="-15,4,0,0" MouseDoubleClick="tvi_AnInnensechskant_MouseDoubleClick" ></TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem Margin="2,0,2,5" Header="Berechnungen">
+                <TreeViewItem x:Name="tvi_BeVierkant" Header="Vierkant" Margin="-15,4,0,0" MouseDoubleClick="tvi_BeVierkant_MouseDoubleClick" ></TreeViewItem>
+                <TreeViewItem x:Name="tvi_BeSechkant" Header="Sechskant" Margin="-15,4,0,0" MouseDoubleClick="tvi_BeSechkant_MouseDoubleClick" ></TreeViewItem>
+                <TreeViewItem x:Name="tvi_BeInnensechskant" Header="Innensechskant" Margin="-15,4,0,0" MouseDoubleClick="tvi_BeInnensechskant_MouseDoubleClick" ></TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem x:Name="tvi_Support" Margin="2,0,2,5" Header="Hilfe und Support" MouseDoubleClick="tvi_Support_MouseDoubleClick" ></TreeViewItem>
+            <TreeViewItem x:Name="tvi_Überuns" Margin="2,0,2,5" Header="Über uns" MouseDoubleClick="tvi_Überuns_MouseDoubleClick" ></TreeViewItem>
+            <TreeViewItem x:Name="tvi_Impressum" Header="Impressum" Margin="2,0,2,5" MouseDoubleClick="tvi_Impressum_MouseDoubleClick"></TreeViewItem>
+        </TreeView>
+
+        <!--Normteile Kopfauswahl -->
+        <Grid x:Name="gr_Normteile" Grid.Row="1" Grid.Column="1" Margin="3, 30, 3,3" Visibility="Hidden" Grid.ColumnSpan="2">
+            <Grid Visibility="Visible" Margin="0,-54,0,0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height=" 50"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+
+
+                <Grid>
+                </Grid>
+                <!-- Normteile Menü-->
+                <Menu x:Name="gr_NT_Auswahl" Grid.ColumnSpan="4" HorizontalAlignment="Left" Width="654" Grid.RowSpan="5" Visibility="Visible" Margin="0,0,0,10">
+
+                    <Grid Height="333" Width="644">
+
+                        <ListBox Margin="22,24,263,136">
+                            <ListBoxItem x:Name="lb_Item_Vierkant" MouseEnter="lb_Item_Vierkant_MouseEnter" MouseLeave="lb_Item_Vierkant_MouseLeave" MouseDoubleClick="lb_Item_Vierkant_MouseDoubleClick_1" >Vierkant</ListBoxItem>
+                            <ListBoxItem x:Name="lb_Item_Sechkant" Background="LightGray" MouseEnter="lb_Item_Sechkant_MouseEnter" MouseLeave="lb_Item_Sechkant_MouseLeave" MouseDoubleClick="lb_Item_Sechkant_MouseDoubleClick" >Sechkant</ListBoxItem>
+                            <ListBoxItem x:Name="lb_Item_Innensechskant" MouseEnter="lb_Item_Innensechskant_MouseEnter" MouseLeave="lb_Item_Innensechskant_MouseLeave" MouseDoubleClick="lb_Item_Innensechskant_MouseDoubleClick" >Innensechskant</ListBoxItem>
+                            <ListBoxItem x:Name="lb_Item_Zylinderkopf" Background="LightGray" MouseEnter="lb_Item_Zylinderkopf_MouseEnter" MouseLeave="lb_Item_Zylinderkopf_MouseLeave" MouseDoubleClick="lb_Item_Zylinderkopf_MouseDoubleClick" >Zylinderkopf</ListBoxItem>
+                            <ListBoxItem x:Name="lb_Item_Schlitzkopf" MouseEnter="lb_Item_Schlitzkopf_MouseEnter" MouseLeave="lb_Item_Schlitzkopf_MouseLeave" MouseDoubleClick="lb_Item_Schlitzkopf_MouseDoubleClick" >Schlitzkopf</ListBoxItem>
+
+
+                        </ListBox>
+
+                        <Image x:Name="im_Sechkant" Margin="406,24,31,179" Source="Ki.png" Visibility="Hidden" ></Image>
+                        <Image x:Name="im_Vierkant" Margin="406,24,31,179" Source="Vierkant.png" Visibility="Hidden"></Image>
+                        <Image x:Name="im_Innensechkant" Margin="406,24,31,179" Source="In.png" Visibility="Hidden" ></Image>
+                        <Image x:Name="im_Zylinderkopf" Margin="406,24,31,179" Source="Zy.png" Visibility="Hidden"></Image>
+                        <Image x:Name="im_Schlitzkopf" Margin="406,24,31,179" Source="Schlitz.png" Visibility="Hidden"></Image>
+
+                        <Image Source="NTText2.png" Margin="-79,233,56,10"></Image>
+
+
+                    </Grid>
+
+                </Menu>
+                <TextBlock x:Name="tbl_Norm" Text="" Margin="28,55,103.5,64" Grid.Row="2" RenderTransformOrigin="0.497,-0.069" Grid.ColumnSpan="3" Grid.RowSpan="2">
+                </TextBlock>
+
+            </Grid>
+
+            <!-- Normteile Eingabe-->
+            <Grid x:Name="gr_NT_Haupt" Visibility="Hidden" >
+                <TabControl HorizontalAlignment="Left" Height="363" Margin="0,-75,0,0" VerticalAlignment="Top" Width="654">
+                    <!-- Eingabe-->
+                    <TabItem Header="Eingabe">
+                        <Grid>
+                            <Grid x:Name="gr_NT_Anpassung" Visibility="Visible" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="84*"></RowDefinition>
+                                    <RowDefinition Height="99*"></RowDefinition>
+                                    <RowDefinition Height="101*"></RowDefinition>
+                                    <RowDefinition Height="51*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <GroupBox Grid.Column="2" Header="Angaben" HorizontalAlignment="Left" Height="200" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Width="324" Grid.ColumnSpan="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height=" 10"></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+
+                                        </Grid.RowDefinitions>
+
+                                        <Label Grid.Row="1" Margin="10,5,0,49" Content="Gewindegröße"></Label>
+                                        <ComboBox x:Name="cb_NT_Gewindegröße" Grid.Row="1" Margin="10,35,10,28">
+                                            <ComboBoxItem IsSelected="True">4</ComboBoxItem>
+                                            <ComboBoxItem>6</ComboBoxItem>
+                                            <ComboBoxItem>8</ComboBoxItem>
+                                            <ComboBoxItem>10</ComboBoxItem>
+                                            <ComboBoxItem>12</ComboBoxItem>
+                                            <ComboBoxItem>14</ComboBoxItem>
+                                            <ComboBoxItem>16</ComboBoxItem>
+
+                                            <ComboBoxItem>20</ComboBoxItem>
+
+                                            <ComboBoxItem>24</ComboBoxItem>
+
+                                        </ComboBox>
+                                        <Label Grid.Row="1" Grid.Column="1" Margin="5,5,10,49">Länge</Label>
+                                        <TextBox x:Name="tb_NT_Länge" Grid.Row="1" Grid.Column="1" Margin="10,35,10,28" LostFocus="tb_Kopfhöhe_LostFocus_1"></TextBox>
+
+                                        <Label Grid.Row="2" Grid.Column="0" Margin="10,0,10,59">Werkstoff</Label>
+                                        <ComboBox Grid.Row="2" Margin="10,29,10,35">
+                                            <ComboBoxItem IsSelected="True" >Baustahl</ComboBoxItem>
+                                            <ComboBoxItem>Messing</ComboBoxItem>
+                                            <ComboBoxItem>Edelstahl</ComboBoxItem>
+                                            <ComboBoxItem>Aluminium</ComboBoxItem>
+
+                                        </ComboBox>
+
+                                        <Label Grid.Row="2" Grid.Column="1" Margin="10,0,10,50">Güteklasse</Label>
+                                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="10,29,10,35">
+                                            <ComboBoxItem Content=""></ComboBoxItem>
+                                            <ComboBoxItem>3.6</ComboBoxItem>
+                                            <ComboBoxItem>4.6</ComboBoxItem>
+                                            <ComboBoxItem>4.8</ComboBoxItem>
+                                            <ComboBoxItem>5.8</ComboBoxItem>
+                                            <ComboBoxItem>6.8</ComboBoxItem>
+                                            <ComboBoxItem>8.8</ComboBoxItem>
+                                            <ComboBoxItem>9.8</ComboBoxItem>
+                                            <ComboBoxItem>10.9</ComboBoxItem>
+                                            <ComboBoxItem>12.9</ComboBoxItem>
+
+
+                                        </ComboBox>
+
+
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Header="Norm" HorizontalAlignment="Left" Height="124" Margin="0,76,0,0" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Width="324" Grid.ColumnSpan="2">
+                                    <Grid>
+                                        <Label Margin="0,0,0,73" FontSize="10">
+                                            Sechskantschraube DIN EN ISO 4017 (durchgängiges Gewinde)
+                                        </Label>
+                                        <Label Margin="0,12,0,67" FontSize=" 10">
+                                            DIN EN ISO 4014 (mit Schaft)
+                                        </Label>
+                                        <Expander Margin="2,40,2,0">Stand: 02/2021</Expander>
+
+                                    </Grid>
+
+                                </GroupBox>
+                                <Button x:Name="btn_NT_Weiter" Grid.Column="3" Grid.Row="3" Margin="10,15,30,15" Click="btn_Beenden2_Click">Beenden</Button>
+                                <Button x:Name="btn_NT_Beenden" Grid.Column="2" Grid.Row="3" Margin="30,15,10,15" Click="btn_NT_Beenden_Click" >Weiter</Button>
+                                <Button x:Name="btn_NT_Zurück" Grid.ColumnSpan="2" Margin="46,15,152,15" Grid.Row="3" Grid.Column="1" Content="Zurück" Click="btn_NT_Zurück_Click" />
+
+                                <Image x:Name="im_Linsenkopf_NT" Source="Linsenkopf TZ.jpg" Grid.ColumnSpan="2" Grid.RowSpan="2" Visibility="Hidden" Margin="0,0,0,28"></Image>
+                                <Image x:Name="im_Innensechskant_NT" Source="Innensechkant TZ.jpg" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,0,23" Visibility="Hidden"></Image>
+                                <Image x:Name="im_Vierkant_NT" Source="Vierkant TZ3.jpg" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,0,23" Visibility="Hidden"></Image>
+                                <Image x:Name="im_Senkkopf_NT" Source="Senkkopf TZ.jpg" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,0,23" Visibility="Hidden"></Image>
+                                <Image x:Name="im_Sechskant_NT" Source="Sechkant TZ V3.gif" Grid.ColumnSpan="2" Grid.RowSpan="2" Visibility="Hidden" ></Image>
+                            </Grid>
+                            <!-- Anzahlauswahl-->
+
+                            <Grid x:Name="gr_NT_Anzahl" Visibility="Hidden" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height=" 30"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height=" 30"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height=" 40"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <Button x:Name="btn_NT_Zurück2" Grid.Row="4" Margin="177,5,10,15" Click="btn_NT_Zurück2_Click" >zurück</Button>
+                                <Button x:Name="btn_AktualisierenNT" Grid.Column="1" Margin="211,5,5,7" Click="btn_AktualisierenNT_Click"  >Aktualisieren</Button>
+                                <Label Margin="5,5,5,1">Ihre Auswahl</Label>
+                                <DataGrid x:Name="dg_NT_Übersicht" Margin="3,3,3,10" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"></DataGrid>
+
+
+                                <Label Grid.Row="3" Margin="10,10,193,81" FontSize="12">Gewünschte Anzahl:</Label>
+                                <Label Grid.Row="3" Margin="10,34,5,41" FontSize="9" FontStyle="Italic" >Aus betriebsrechtlichen Gründen liegt die maximale Anzahl bei 1000 Stück.</Label>
+                                <Label Grid.Row="3" Margin="10,49,5,26" FontSize="9" FontStyle="Italic" >Bitte Doppelklick in das Feld.</Label>
+                                <TextBox x:Name="tb_NT_Anzahl" Grid.Row="3" Margin="165,10,10,0" RenderTransformOrigin="0.774,-1.379" MouseDoubleClick="tb_NT_Anzahl_MouseDoubleClick" Height="24" VerticalAlignment="Top" LostFocus="tb_NT_Anzahl_LostFocus_1"  >
+                                    0
+                                </TextBox>
+
+                                <GroupBox Margin="4,0,3,0" RenderTransformOrigin="1.65,-0.699" Grid.Column="1" Grid.Row="3">
+
+                                    <Grid Grid.Row="3" Grid.Column="1">
+                                        <Label Margin="10,10,246,75">Preis:</Label>
+                                        <Label  Grid.Row="3" Grid.Column="1" Margin="81,10,10,0" Height="34" VerticalAlignment="Top"></Label>
+                                        <Label  Margin="81,49,10,0" Height="34" VerticalAlignment="Top"/>
+                                        <Button  Margin="157,89,19,0" Click="btn_PreisBerechnen_Click" Height="20" VerticalAlignment="Top" >Preis berechnen</Button>
+                                    </Grid>
+                                </GroupBox>
+                                <Button Grid.Column="1" Grid.Row="4" Margin="167,5,27,15" Click="btn_Beenden2_Click">Beenden</Button>
+                                <Button x:Name="btn_NT_Hinzufügen" Grid.Row="4" Margin="10,5,178,15" Grid.Column="1" IsEnabled="False" Click="btn_NT_Hinzufügen_Click" >Hinzufügen</Button>
+
+                            </Grid>
+
+
+
+
+
+                        </Grid>
+
+
+
+
+
+                    </TabItem>
+                    <!-->Ausgabe (Warenkorb)-->
+                    <TabItem Header="Warenkorb">
+                        <Grid Margin="0,0,0,-2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="25*"/>
+                                <ColumnDefinition Width="169*"/>
+                                <ColumnDefinition Width="454*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Margin="335,5,5,0" Height="22" VerticalAlignment="Top" Grid.Column="2" Click="Button_Click"  >Aktualisieren</Button>
+
+                            <DataGrid x:Name="dg_Warenkorb2" Margin="10,32,10,10" Grid.ColumnSpan="3"/>
+                        </Grid>
+
+                    </TabItem>
+
+                    <TabItem x:Name="tc_Item_technischesDatenbeiblatt" Header="technisches Datenbeiblatt" Visibility="Hidden">
+                        <Grid>
+                            <DataGrid x:Name="dg_technischesDatenblatt" Margin="5,45,5,115">
+
+                            </DataGrid>
+                            <Label x:Name="lbl_technischesDatenblatt" Margin="5,10,5,295" Content=""></Label>
+
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+
+
+
+            </Grid>
+
+        </Grid>
+
+
+        <!-- Individuell Berechungen Vierkant und Sechkant-->
+
+        <TabControl x:Name="tc_BerechnungenVierkant" Grid.Column="1" Margin="0,37,3,3" Grid.RowSpan="2" Visibility="Hidden" Grid.ColumnSpan="2">
+            <!--Eingabe-->
+            <TabItem Header="Eingabe" Height="22" VerticalAlignment="Top">
+                <Grid Margin="2,2,2,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="50"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Image x:Name="im_VierkantTZ" Source="Vierkant TZ1.png" Grid.ColumnSpan="2" Grid.RowSpan="3" Visibility="Hidden"/>
+                    <Image x:Name="im_SechkantTZ" Source="Sechkant TZ.png" Grid.ColumnSpan="2" Grid.RowSpan="3" Visibility="Hidden" />
+
+                    <!-- Infos zum Kopf-->
+                    <GroupBox Header="Infos zum Kopf : Vierkant" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,48,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="1" Grid.Column="0" Content="Kopfhöhe (k)"></Label>
+                            <TextBox x:Name="tb_Kopfhöhe" Grid.Row="1" Grid.Column="0" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1" />
+
+                            <Label x:Name="lbl_Kopfbreite" Grid.Row="1" Grid.Column="1"></Label>
+                            <TextBox x:Name="tb_Kopfbreite" Grid.Row="1" Grid.Column="1" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+                        </Grid>
+                    </GroupBox>
+                    <!-- Infos zum Gewinde-->
+                    <GroupBox Grid.Column="2" Header="Infos zum Gewinde" Grid.RowSpan="3" Grid.ColumnSpan="2" Margin="0,50,0,-1" Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="Gewindeart"></Label>
+                            <ComboBox Grid.Row="1" Grid.Column="0" Margin="3,25,15,0" Height="22" VerticalAlignment="Top">
+                                <ComboBoxItem IsSelected="true" Content="Metrisches Gewinde"></ComboBoxItem>
+                                <ComboBoxItem Content="Metrisches Feingewinde"></ComboBoxItem>
+                                <ComboBoxItem Content="Trapezgewinde"></ComboBoxItem>
+                                <ComboBoxItem Content="Sägengewinde"></ComboBoxItem>
+                            </ComboBox>
+
+                            <Label Grid.Row="1" Grid.Column="1" Content="Gewindelänge (b)"></Label>
+                            <TextBox x:Name="tb_Gewindelänge" Grid.Row="1" Grid.Column="1" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Content="Gewindedurchmesser (d)"></Label>
+                            <TextBox x:Name="tb_Gewindedurchmesser" Grid.Row="2" Grid.Column="0" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+
+                            <Label Grid.Row="2" Grid.Column="1" Content="Schaftlänge"></Label>
+                            <TextBox x:Name="tb_Schaftlänge" Grid.Row="2" Grid.Column="1" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+
+                        </Grid>
+                        <!-- WerkstoffBox-->
+                    </GroupBox>
+                    <GroupBox Grid.Column="2" Header="Werkstoff" Margin="0,19,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2" Height="101" VerticalAlignment="Top">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <!-- Werkstoffauswahl-->
+                            <Label Grid.Row="1" Grid.Column="0" Content="Werkstoff"></Label>
+                            <ComboBox x:Name="cb_Be_werkstoffauswahl" Grid.Row="1" Grid.Column="0" Margin="3,25,15,0" Height="22" VerticalAlignment="Top">
+                                <ComboBoxItem x:Name="cb_Item_Kupfer" IsSelected="True"  Content="Kupfer" Selected="cb_Item_Baustahl_Selected"  ></ComboBoxItem>
+                                <ComboBoxItem x:Name="cb_Item_Stahl" Content="Stahl" Selected="cb_Item_Vergütungsstahl_Selected" ></ComboBoxItem>
+                                <ComboBoxItem x:Name="cb_Item_Messing" Content="Messing" Selected="cb_Item_Messing_Selected" ></ComboBoxItem>
+                                <ComboBoxItem x:Name="cb_Item_Aluminium" Content="Aluminium" Selected="cb_Item_Aluminium_Selected" ></ComboBoxItem>
+                                <ComboBoxItem x:Name="cb_Item_Gelbes_Messing" Content="Gelbes Messing"></ComboBoxItem>
+                                <ComboBoxItem x:Name="cb_Item_Silber" Content="Silber"></ComboBoxItem>
+                            </ComboBox>
+
+                            <!-- Legierungswahl-->
+                            <Label Grid.Row="1" Grid.Column="1" Content="Legierung"></Label>
+                            <ComboBox x:Name="cb_Legierungen" Grid.Row="1" Grid.Column="1" Margin="3,25,15,0" Height="22" VerticalAlignment="Top">
+                                <ComboBoxItem x:Name="cb_Item_Leer" Content=""></ComboBoxItem>
+                                <ComboBoxItem x:Name="cb_Item_Kupferlegierung" Content="Kupferlegierung"></ComboBoxItem>
+                                <ComboBoxItem x:Name="cb_Item_Bronzelegierung" Content="Bronzelegierung"></ComboBoxItem>
+                            </ComboBox>
+
+
+                        </Grid>
+                    </GroupBox>
+
+                    <Button Grid.Column=" 3" Grid.Row=" 4" Margin=" 05,15,30,15" Click="btn_Beenden2_Click">Beenden</Button>
+                    <Button x:Name="btn_Berechnen" Grid.Column=" 2" Grid.Row=" 4" Margin=" 30,15,15,15" Click="btn_Berechnen_Click" >Berechnen</Button>
+                    <Button x:Name="btn_Be_CATIA_Anbindung" Margin="46,15,153,15" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="1" Content="in CATIA öffnen" IsEnabled="False" Click="Button_Berechnung_CATIA_Part_Click"/>
+                </Grid>
+
+            </TabItem>
+            <!--Ausgabe-->
+            <TabItem Header="technisches Datenblatt">
+                <Grid Margin="2" RenderTransformOrigin="0.502,0.498">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="31*"></RowDefinition>
+                        <RowDefinition Height="39*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="dg_TechnischeDaten" Grid.Row="1" Margin="5,35,5,5" Visibility="Hidden" >
+
+                    </DataGrid>
+                    <DataGrid x:Name="dg_Angaben2" Margin="328,30,2,2"></DataGrid>
+                    <Label Content="Ihre Angaben" x:Name="lbl_LAbel" Visibility="Visible"></Label>
+                    <Label Margin="5,3,5,162" Grid.Row="1" RenderTransformOrigin="0.5,0.5" Content="technische Daten"/>
+                    <DataGrid x:Name="dg_Angaben" Margin="2,30,328,2">
+
+                    </DataGrid>
+                    <Button x:Name="btn_Aktualisieren" Margin="564,0,2,0" Click="Aktualisieren_Click" Height="25" VerticalAlignment="Top" IsEnabled="False">Aktualisieren</Button>
+
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+
+        <!--Individuell Berechnungen Innensechskant-->
+
+        <TabControl x:Name="tc_BerechnungenInnensechkant" Grid.Column="1" Grid.Row="1" Visibility="Hidden" Grid.ColumnSpan="2">
+            <!--Eingabe-->
+            <TabItem Header="Eingabe">
+                <Grid Margin="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+
+                </Grid>
+            </TabItem>
+            <!--Ausgabe-->
+            <TabItem Header="technisches Datenblatt">
+                <Grid Margin="2">
+
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- Anpassung Kaufen-->
+        <TabControl x:Name="tc_Anpassungvierkant" Margin="3,37,3,3" Grid.Column="1" Grid.RowSpan="2" Visibility="Hidden"  Grid.ColumnSpan="2">
+
+            <TabItem Header="Anpassung">
+                <Grid>
+                    <Grid x:Name="gr_AnAnpassung" Margin="2,2,2,0" Visibility="Visible" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Image x:Name="im_Vierkant_Be_TZ" Source="Vierkant TZ1.png" Grid.ColumnSpan="2" Grid.RowSpan="3" Visibility="Hidden"/>
+                        <Image x:Name="im_Sechkant_Be_TZ" Source="Sechkant TZ.png" Grid.ColumnSpan="2" Grid.RowSpan="3" Visibility="Hidden" />
+
+                        <GroupBox Header="Infos zum Kopf" x:Name="gb_Innensechskant" Grid.ColumnSpan="2" Margin="0,46,2,47.667" Grid.RowSpan="4" Grid.Row="1" Visibility="Hidden">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="0" Content="Kopfhöhe" Grid.ColumnSpan="2" Margin="9,3,10,115"></Label>
+                                <TextBox x:Name="tb_An_In_Kopfhöhe" Grid.Row="1" Grid.Column="0" Margin="8,28,15,0" Height="20" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1" Grid.ColumnSpan="2"/>
+                                <TextBox x:Name="tb_An_Innenkopfhöhe" Margin="9,98,15,24" Grid.Row="1" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2"/>
+                                <TextBox x:Name="tb_An_In_Innenschlüsselweite" Margin="10,98,9,24" Grid.Row="1" RenderTransformOrigin="0.5,0.5" Grid.Column="2"/>
+                                <Label Margin="10,4,9,105" Grid.Column="2" Content="Zylinderdurchmesser" Grid.Row="1"/>
+                                <Label Margin="9,73,15,40" Grid.Row="1" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Content="Innenkopfhöhe"/>
+                                <Label Margin="5,73,9,45" Grid.Column="2" Grid.Row="1" Content="Innenschlüsselweite"/>
+
+
+                                <TextBox x:Name="tb_An_In_Zylinderdurchmesser" Grid.Row="1" Grid.Column="2" Margin="9,28,9,0" Height="20" VerticalAlignment="Top"/>
+                            </Grid>
+
+                        </GroupBox>
+
+                        <GroupBox x:Name="gb_VierkantUndSechskant" Header="Infos zum Kopf : Vierkant" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,48,0,0" Visibility="Hidden" >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="0" Content="Kopfhöhe" Grid.ColumnSpan="2"></Label>
+                                <TextBox x:Name="tb_AnKopfhöhe" Grid.Row="1" Grid.Column="0" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1" Grid.ColumnSpan="2"/>
+
+                                <Label x:Name="lbl_AnKopfbreite" Grid.Row="1" Grid.Column="2"></Label>
+                                <TextBox x:Name="tb_AnKopfbreite" Grid.Row="1" Grid.Column="2" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+                            </Grid>
+                        </GroupBox>
+                        <!--Gewindeinfos-->
+
+                        <GroupBox Grid.Column="2" Header="Infos zum Gewinde" Grid.RowSpan="3" Grid.ColumnSpan="2" Margin="0,50,0,-1" Grid.Row="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Label Grid.Row="1" Grid.Column="0" Content="Gewindeart"></Label>
+                                <ComboBox Grid.Row="1" Grid.Column="0" Margin="3,25,15,0" Height="22" VerticalAlignment="Top">
+                                    <ComboBoxItem x:Name="cb_An_MetrischesGewinde" IsSelected="true" Content="Metrisches Gewinde"></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_An_MetrischesFeingewinde" Content="Metrisches Feingewinde"></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_An_Trapezgewinde" Content="Trapezgewinde"></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_An_Sägengewinde" Content="Sägengewinde"></ComboBoxItem>
+                                </ComboBox>
+
+                                <Label Grid.Row="1" Grid.Column="1" Content="Gewindelänge"></Label>
+                                <TextBox x:Name="tb_AnGewindelänge" Grid.Row="1" Grid.Column="1" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+
+                                <Label Grid.Row="2" Grid.Column="0" Content="Gewindedurchmesser"></Label>
+                                <TextBox x:Name="tb_AnGewindedurchmesser" Grid.Row="2" Grid.Column="0" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+
+                                <Label Grid.Row="2" Grid.Column="1" Content="Schaftlänge"></Label>
+                                <TextBox x:Name="tb_AnSchaftlänge" Grid.Row="2" Grid.Column="1" Margin="3,25,15,0" Height="22" VerticalAlignment="Top" LostFocus="tb_Kopfhöhe_LostFocus_1"/>
+
+                            </Grid>
+
+                            <!-- WerkstoffBox-->
+                        </GroupBox>
+
+                        <GroupBox Header="Steigung" Margin="0,21,-1,0" HorizontalAlignment="Right" Width="160" Grid.Column="3" Height="100" VerticalAlignment="Top" Grid.RowSpan="2">
+                            <Grid>
+                                <Label Margin="0,3,0,44" RenderTransformOrigin="0.5,0.5">
+                                    <Label.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform AngleX="2.692"/>
+                                            <RotateTransform/>
+                                            <TranslateTransform X="0.588"/>
+                                        </TransformGroup>
+                                    </Label.RenderTransform>
+                                    Gewindesteigung
+                                </Label>
+                                <TextBox x:Name="tb_An_Gewindesteigung" Margin="0,33,0,24" LostFocus="tb_Kopfhöhe_LostFocus_1"></TextBox>
+
+                            </Grid>
+
+                        </GroupBox>
+
+                        <GroupBox Grid.Column="2" Header="Werkstoff" Margin="0,19,3,0" Grid.RowSpan="2" Height="101" VerticalAlignment="Top">
+                            <Grid Margin="0,-3,152,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <!-- Werkstoffauswahl-->
+                                <Label Grid.Row="1" Grid.Column="0" Content="Werkstoff"></Label>
+                                <ComboBox x:Name="cb_An_wertstoffauswahl" Grid.Row="1" Grid.Column="0" Margin="3,25,-142,0" Height="22" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                                    <ComboBoxItem x:Name="cb_Item_AnKupfer" IsSelected="True"  Content="Kupfer" Selected="cb_Item_Baustahl_Selected"  ></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_Item_AnStahl" Content="Stahl" Selected="cb_Item_Vergütungsstahl_Selected" ></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_Item_AnMessing" Content="Messing" Selected="cb_Item_Messing_Selected" ></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_Item_AnAluminium" Content="Aluminium" Selected="cb_Item_Aluminium_Selected" ></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_Item_An_Gelbes_Messing" Content="Gelbes Messing"></ComboBoxItem>
+                                    <ComboBoxItem x:Name="cb_Item_An_Silber" Content="Silber"></ComboBoxItem>
+                                </ComboBox>
+                                <Label Grid.ColumnSpan="2" Margin="0,8,-142,0" Height="25" VerticalAlignment="Top" Content="Werkstoffwahl" Grid.RowSpan="2"/>
+
+                                <!-- Legierungswahl-->
+                            </Grid>
+                        </GroupBox>
+                        <Button x:Name="btn_Beenden2" Grid.Column="3" Grid.Row="4" Margin="5,15,25,15" Click="btn_Beenden2_Click" >Beenden</Button>
+                        <Button x:Name="btn_Erstellen" Grid.Column="2" Grid.Row="4" Margin="15" Click="btn_Erstellen_Click" Visibility="Hidden">Weiter</Button>
+                        <Button x:Name="btn_Erstellen2" Grid.Column="2" Grid.Row="4" Margin="15" Click="btn_Erstellen2_Click" Visibility="Hidden">Weiter</Button>
+
+
+
+                    </Grid>
+                    <!-- Anzahlauswahl-->
+
+                    <Grid x:Name="gr_AnAnzahl" Visibility="Hidden" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height=" 30"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height=" 30"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height=" 40"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        
+                        
+                        <ProgressBar x:Name="pb_1" Margin="53,8,0,7" HorizontalAlignment="Left" Width="145" Grid.Column="1"/>
+
+                        
+                        
+                        <!--Catia Anbindung-->
+                        <Button x:Name="btn_Catia_An_Betrachtung" Grid.Row="4" Margin="12,5,172,15" Click="Button_Anppasung_Catia_Part_Click" IsEnabled="False">öffnen mit CATIA</Button>
+
+                        <Button Grid.Row="4" Margin="167,5,12,15" Click="btn_zurück_Click" >zurück</Button>
+                        <Button x:Name="btn_Aktualisieren2" Grid.Column="1" Margin="211,5,5,7" Click="btn_Aktualisieren2_Click" >Aktualisieren</Button>
+                        <Label Margin="5,5,5,1">Ihre Auswahl</Label>
+                        <DataGrid x:Name="dg_Übersicht" Margin="3,3,3,10" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"></DataGrid>
+
+
+
+                        <Label Grid.Row="3" Margin="10,10,193,81" FontSize="12">Gewünschte Anzahl:</Label>
+                        <Label Grid.Row="3" Margin="10,34,5,41" FontSize="9" FontStyle="Italic" >Aus betriebsrechtlichen Gründen liegt die maximale Anzahl bei 1000 Stück.</Label>
+                        <Label Grid.Row="3" Margin="10,49,5,26" FontSize="9" FontStyle="Italic" >Bitte Doppelklick in das Feld.</Label>
+                        <TextBox x:Name="tb_Anzahl" Grid.Row="3" Margin="165,10,10,0" RenderTransformOrigin="0.774,-1.379" LostFocus="tb_Anzahl_LostFocus" MouseDoubleClick="tb_Anzahl_MouseDoubleClick" Height="24" VerticalAlignment="Top" >
+                            0
+                        </TextBox>
+
+                        <GroupBox Margin="4,0,3,0" RenderTransformOrigin="1.65,-0.699" Grid.Column="1" Grid.Row="3">
+
+                            <Grid Grid.Row="3" Grid.Column="1">
+                                <Label Margin="10,10,246,75">Preis:</Label>
+                                <Label x:Name="lbl_einzelpreis" Grid.Row="3" Grid.Column="1" Margin="81,10,10,0" Height="34" VerticalAlignment="Top"></Label>
+                                <Label x:Name="lbl_gesamtpreis" Margin="81,49,10,0" Height="34" VerticalAlignment="Top"/>
+                                <Button x:Name="btn_PreisBerechnen" Margin="157,89,19,0" Click="btn_PreisBerechnen_Click" Height="20" VerticalAlignment="Top" >Preis berechnen</Button>
+                            </Grid>
+                        </GroupBox>
+                        <Button Grid.Column="1" Grid.Row="4" Margin="167,5,27,15" Click="btn_Beenden2_Click">Beenden</Button>
+                        <Button x:Name="btn_Hinzufügen" Grid.Row="4" Margin="10,5,178,15" Grid.Column="1" Click="btn_Hinzufügen_Click" IsEnabled="False" >Hinzufügen</Button>
+
+                    </Grid>
+                </Grid>
+
+
+
+
+            </TabItem>
+            <!--Warenkorb-->
+
+            <TabItem Header="Warenkorb">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="17*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="33*"></RowDefinition>
+                        <RowDefinition Height="325*"></RowDefinition>
+
+                    </Grid.RowDefinitions>
+                    <Button x:Name="btn_AktualisierenNew" Margin="504,5,5,0" Height="22" VerticalAlignment="Top" Grid.Column="1" Click="btn_AktualisierenNew_Click" >Aktualisieren</Button>
+
+                    <DataGrid x:Name="dg_Warenkorb" Grid.Row="1" Margin="10" Grid.ColumnSpan="2">
+
+
+                    </DataGrid>
+
+                </Grid>
+
+            </TabItem>
+            <WebBrowser Height="100" Width="100"/>
+
+
+
+        </TabControl>
+
+        <!-- ÜberUns-->
+
+        <Grid x:Name="gr_Überuns" Grid.Column="1" Grid.Row ="1" Margin="2,2,2,269" Visibility="Hidden" Grid.ColumnSpan="2">
+            <Label BorderBrush="White" Background=" White" Height="Auto" Content="Warum Schraubentechnik GmbH &amp; CoKG ?" FontSize="20" Margin="0,10,0,-10">
+            </Label>
+            <Image Source="Screen1.png" Margin="0,10,10,-243"></Image>
+
+        </Grid>
+
+        <Grid x:Name="im_HilfeSupport" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,10,10" Visibility="Hidden">
+            <Image Source="Support.png" Margin="0,-36,0,-49"/>
+
+        </Grid>
+
+        <!--Impressum-->
+        <Grid>
+            <Image x:Name="im_Impressum" Source="Impressum.png" Margin="147,73,-592,-299" RenderTransformOrigin="0.5,0.5" Visibility="Hidden" >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.031"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+
+        </Grid>
+
+
+
+
+
+
+    </Grid>
+</Window>
