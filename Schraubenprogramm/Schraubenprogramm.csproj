@@ -36,15 +36,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.HybridShapeTypeLib">
+<<<<<<< HEAD
       <HintPath>..\..\..\..\..\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.HybridShapeTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.KnowledgewareTypeLib">
       <HintPath>..\..\..\..\..\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.KnowledgewareTypeLib.dll</HintPath>
+=======
+      <HintPath>..\..\..\..\Downloads\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.KnowledgewareTypeLib">
+      <HintPath>..\..\..\..\Downloads\Neuer Ordner\Interop.KnowledgewareTypeLib.dll</HintPath>
+>>>>>>> fe7d338b12f01e02d4ec94066c3c7a02d4ffe394
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.ProductStructureTypeLib">
-      <HintPath>..\..\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
