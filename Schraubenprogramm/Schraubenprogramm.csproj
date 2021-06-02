@@ -36,7 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.HybridShapeTypeLib">
-<<<<<<< Updated upstream
       <HintPath>..\..\..\..\Downloads\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -46,17 +45,6 @@
     </Reference>
     <Reference Include="Interop.ProductStructureTypeLib">
       <HintPath>..\..\..\..\Downloads\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
-=======
-      <HintPath>..\..\..\..\Desktop\4. Semester\Hochsprachenprogrammierung\Mecke HSP\Neuer Ordner\Schraubenprogramm\Neuer_Ordner\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.KnowledgewareTypeLib">
-      <HintPath>..\..\..\..\Desktop\4. Semester\Hochsprachenprogrammierung\Mecke HSP\Neuer Ordner\Schraubenprogramm\Neuer_Ordner\Neuer Ordner\Interop.KnowledgewareTypeLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.ProductStructureTypeLib">
-      <HintPath>..\..\..\..\Desktop\4. Semester\Hochsprachenprogrammierung\Mecke HSP\Neuer Ordner\Schraubenprogramm\Neuer_Ordner\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
->>>>>>> Stashed changes
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
