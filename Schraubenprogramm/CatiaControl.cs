@@ -577,53 +577,47 @@ namespace Schraubenprogramm
         #region Sechskantkopf
         internal void ErzeugeSechskantKopfProfil(Schraubenkopf kopfeigenschaften)
         {
-            double HalbeLänge = (kopfeigenschaften.breite) / 2;
-            double HalbeBreite = HalbeLänge * 0.4;
+            double SW = kopfeigenschaften.breite;
+            double SWWurzel3 = SW / Math.Sqrt(3);
+            double SWWurzel2 = SW / Math.Sqrt(2);
             double Kopfhöhe = kopfeigenschaften.höhe;
+            double V0 = 0;
 
             F2D = stg_catiaKopfProfil.OpenEdition();
 
-            Point2D Point2D_1 = F2D.CreatePoint(HalbeBreite, HalbeLänge);                              //Sechseck erzeugen 
-            Point2D Point2D_2 = F2D.CreatePoint(-HalbeBreite, HalbeLänge);
-            Point2D Point2D_3 = F2D.CreatePoint(-HalbeLänge, HalbeBreite);
-            Point2D Point2D_4 = F2D.CreatePoint(-HalbeLänge, -HalbeBreite);
-            Point2D Point2D_5 = F2D.CreatePoint(-HalbeBreite, -HalbeLänge);
-            Point2D Point2D_6 = F2D.CreatePoint(HalbeBreite, -HalbeLänge);
-            Point2D Point2D_7 = F2D.CreatePoint(HalbeLänge, -HalbeBreite);
-            Point2D Point2D_8 = F2D.CreatePoint(HalbeLänge, HalbeBreite);
+            Point2D Point2D_1 = F2D.CreatePoint((SWWurzel2 / 2), (- SW / 2));                              //Sechseck erzeugen 
+            Point2D Point2D_2 = F2D.CreatePoint(SWWurzel3, 0);
+            Point2D Point2D_3 = F2D.CreatePoint((SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_4 = F2D.CreatePoint((-SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_5 = F2D.CreatePoint(-SWWurzel3, 0);
+            Point2D Point2D_6 = F2D.CreatePoint((-SWWurzel2 /2), (-SW / 2));
+            
 
-            Line2D Line2D_1 = F2D.CreateLine(HalbeBreite, HalbeLänge, -HalbeBreite, HalbeLänge);
+            Line2D Line2D_1 = F2D.CreateLine((SWWurzel2 / 2), (-SW / 2), SWWurzel3, 0);
             Line2D_1.StartPoint = Point2D_1;
             Line2D_1.EndPoint = Point2D_2;
 
-            Line2D Line2D_2 = F2D.CreateLine(-HalbeBreite, HalbeLänge, -HalbeLänge, HalbeBreite);
+            Line2D Line2D_2 = F2D.CreateLine(SWWurzel3, 0, (SWWurzel2 / 2), (SW / 2));
             Line2D_2.StartPoint = Point2D_2;
             Line2D_2.EndPoint = Point2D_3;
 
-            Line2D Line2D_3 = F2D.CreateLine(-HalbeLänge, HalbeBreite, -HalbeLänge, -HalbeBreite);
+            Line2D Line2D_3 = F2D.CreateLine((SWWurzel2 / 2), (SW / 2), (-SWWurzel2 / 2), (SW / 2));
             Line2D_3.StartPoint = Point2D_3;
             Line2D_3.EndPoint = Point2D_4;
 
-            Line2D Line2D_4 = F2D.CreateLine(-HalbeLänge, -HalbeBreite, -HalbeBreite, -HalbeLänge);
+            Line2D Line2D_4 = F2D.CreateLine((-SWWurzel2 / 2), (SW / 2), -SWWurzel3, 0);
             Line2D_4.StartPoint = Point2D_4;
             Line2D_4.EndPoint = Point2D_5;
 
-            Line2D Line2D_5 = F2D.CreateLine(-HalbeBreite, -HalbeLänge, HalbeBreite, -HalbeLänge);
+            Line2D Line2D_5 = F2D.CreateLine(-SWWurzel3, 0, (-SWWurzel2 / 2), (-SW / 2));
             Line2D_5.StartPoint = Point2D_5;
             Line2D_5.EndPoint = Point2D_6;
 
-            Line2D Line2D_6 = F2D.CreateLine(HalbeBreite, -HalbeLänge, HalbeLänge, -HalbeBreite);
+            Line2D Line2D_6 = F2D.CreateLine((-SWWurzel2 / 2), (-SW / 2), (SWWurzel2 / 2), (-SW / 2));
             Line2D_6.StartPoint = Point2D_6;
-            Line2D_6.EndPoint = Point2D_7;
+            Line2D_6.EndPoint = Point2D_1;
 
-            Line2D Line2D_7 = F2D.CreateLine(HalbeLänge, -HalbeBreite, HalbeLänge, HalbeBreite);
-            Line2D_7.StartPoint = Point2D_7;
-            Line2D_7.EndPoint = Point2D_8;
-
-            Line2D Line2D_8 = F2D.CreateLine(HalbeLänge, HalbeBreite, HalbeBreite, HalbeLänge);
-            Line2D_8.StartPoint = Point2D_8;
-            Line2D_8.EndPoint = Point2D_1;
-
+            
             stg_catiaKopfProfil.CloseEdition();                                                //Main Body in Bearbeitung definieren 
             stg_catiaPart.Part.InWorkObject = stg_catiaPart.Part.MainBody;
 
@@ -722,50 +716,43 @@ namespace Schraubenprogramm
 
             F2D = stg_catiaTasche.OpenEdition();
 
-            double HalbeLänge = itsKopfeigenschaften.innenschlüsselweite / 2;
-            double HalbeBreite = HalbeLänge * 0.4;
+            double SW = itsKopfeigenschaften.innenschlüsselweite;
+            double SWWurzel3 = SW / Math.Sqrt(3);
+            double SWWurzel2 = SW / Math.Sqrt(2);
             double Kopfhöhe = itsKopfeigenschaften.innenhöhe;
 
-            Point2D Point2D_1 = F2D.CreatePoint(HalbeBreite, HalbeLänge);                              //Sechseck erzeugen 
-            Point2D Point2D_2 = F2D.CreatePoint(-HalbeBreite, HalbeLänge);
-            Point2D Point2D_3 = F2D.CreatePoint(-HalbeLänge, HalbeBreite);
-            Point2D Point2D_4 = F2D.CreatePoint(-HalbeLänge, -HalbeBreite);
-            Point2D Point2D_5 = F2D.CreatePoint(-HalbeBreite, -HalbeLänge);
-            Point2D Point2D_6 = F2D.CreatePoint(HalbeBreite, -HalbeLänge);
-            Point2D Point2D_7 = F2D.CreatePoint(HalbeLänge, -HalbeBreite);
-            Point2D Point2D_8 = F2D.CreatePoint(HalbeLänge, HalbeBreite);
 
-            Line2D Line2D_1 = F2D.CreateLine(HalbeBreite, HalbeLänge, -HalbeBreite, HalbeLänge);
+            Point2D Point2D_1 = F2D.CreatePoint((SWWurzel2 / 2), (-SW / 2));                              //Sechseck erzeugen 
+            Point2D Point2D_2 = F2D.CreatePoint(SWWurzel3, 0);
+            Point2D Point2D_3 = F2D.CreatePoint((SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_4 = F2D.CreatePoint((-SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_5 = F2D.CreatePoint(-SWWurzel3, 0);
+            Point2D Point2D_6 = F2D.CreatePoint((-SWWurzel2 / 2), (-SW / 2));
+
+
+            Line2D Line2D_1 = F2D.CreateLine((SWWurzel2 / 2), (-SW / 2), SWWurzel3, 0);
             Line2D_1.StartPoint = Point2D_1;
             Line2D_1.EndPoint = Point2D_2;
 
-            Line2D Line2D_2 = F2D.CreateLine(-HalbeBreite, HalbeLänge, -HalbeLänge, HalbeBreite);
+            Line2D Line2D_2 = F2D.CreateLine(SWWurzel3, 0, (SWWurzel2 / 2), (SW / 2));
             Line2D_2.StartPoint = Point2D_2;
             Line2D_2.EndPoint = Point2D_3;
 
-            Line2D Line2D_3 = F2D.CreateLine(-HalbeLänge, HalbeBreite, -HalbeLänge, -HalbeBreite);
+            Line2D Line2D_3 = F2D.CreateLine((SWWurzel2 / 2), (SW / 2), (-SWWurzel2 / 2), (SW / 2));
             Line2D_3.StartPoint = Point2D_3;
             Line2D_3.EndPoint = Point2D_4;
 
-            Line2D Line2D_4 = F2D.CreateLine(-HalbeLänge, -HalbeBreite, -HalbeBreite, -HalbeLänge);
+            Line2D Line2D_4 = F2D.CreateLine((-SWWurzel2 / 2), (SW / 2), -SWWurzel3, 0);
             Line2D_4.StartPoint = Point2D_4;
             Line2D_4.EndPoint = Point2D_5;
 
-            Line2D Line2D_5 = F2D.CreateLine(-HalbeBreite, -HalbeLänge, HalbeBreite, -HalbeLänge);
+            Line2D Line2D_5 = F2D.CreateLine(-SWWurzel3, 0, (-SWWurzel2 / 2), (-SW / 2));
             Line2D_5.StartPoint = Point2D_5;
             Line2D_5.EndPoint = Point2D_6;
 
-            Line2D Line2D_6 = F2D.CreateLine(HalbeBreite, -HalbeLänge, HalbeLänge, -HalbeBreite);
+            Line2D Line2D_6 = F2D.CreateLine((-SWWurzel2 / 2), (-SW / 2), (SWWurzel2 / 2), (-SW / 2));
             Line2D_6.StartPoint = Point2D_6;
-            Line2D_6.EndPoint = Point2D_7;
-
-            Line2D Line2D_7 = F2D.CreateLine(HalbeLänge, -HalbeBreite, HalbeLänge, HalbeBreite);
-            Line2D_7.StartPoint = Point2D_7;
-            Line2D_7.EndPoint = Point2D_8;
-
-            Line2D Line2D_8 = F2D.CreateLine(HalbeLänge, HalbeBreite, HalbeBreite, HalbeLänge);
-            Line2D_8.StartPoint = Point2D_8;
-            Line2D_8.EndPoint = Point2D_1;
+            Line2D_6.EndPoint = Point2D_1;
 
             stg_catiaTasche.CloseEdition();                                         // Main Body in Bearbeitung definieren 
             stg_catiaPart.Part.InWorkObject = stg_catiaPart.Part.MainBody;
@@ -775,6 +762,20 @@ namespace Schraubenprogramm
             catKopfTasche.set_Name("Schraubenkopf");
 
             stg_catiaPart.Part.Update();
+
+            //Kantenverrundung Kopf
+            #region Kantenverrundung Kopf
+            Reference refernz1 = catPart.CreateReferenceFromName("");
+
+            CatFilletEdgePropagation catEdgeProp = CatFilletEdgePropagation.catTangencyFilletEdgePropagation;
+
+            ConstRadEdgeFillet kantenverrundung1 = SF2D.AddNewEdgeFilletWithConstantRadius(referenz1, catEdgeProp, 2);
+
+            Reference referenz2 = catPart.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:(Pad.2;0:(Brp:(Sketch.5;1)));None:();Cf11:());Face:(Brp:(Pad.2;2);None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", catKopfTasche);
+            kantenverrundung1.AddObjectToFillet(referenz2);
+
+            stg_catiaPart.Part.Update();
+            #endregion
         }
         #endregion
         #endregion
