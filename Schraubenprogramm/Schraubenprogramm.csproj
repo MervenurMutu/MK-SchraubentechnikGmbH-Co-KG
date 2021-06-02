@@ -36,15 +36,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.HybridShapeTypeLib">
-      <HintPath>..\..\..\..\..\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.HybridShapeTypeLib.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\4. Semester\Hochsprachenprogrammierung\Mecke HSP\Neuer Ordner\Schraubenprogramm\Neuer_Ordner\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.KnowledgewareTypeLib">
-      <HintPath>..\..\..\..\..\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.KnowledgewareTypeLib.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\4. Semester\Hochsprachenprogrammierung\Mecke HSP\Neuer Ordner\Schraubenprogramm\Neuer_Ordner\Neuer Ordner\Interop.KnowledgewareTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.ProductStructureTypeLib">
-      <HintPath>..\..\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\4. Semester\Hochsprachenprogrammierung\Mecke HSP\Neuer Ordner\Schraubenprogramm\Neuer_Ordner\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
