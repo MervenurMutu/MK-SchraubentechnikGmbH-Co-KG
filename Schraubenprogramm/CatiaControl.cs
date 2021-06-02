@@ -1189,7 +1189,41 @@ namespace Schraubenprogramm
         #endregion
 
 
-        public void Screenshot(string bildname)
+        //Screenshot erzeugen
+        #region Screenshot
+        public void ErzeugeScreenshot(Schraube Schraube)
+        {
+            //Dateiname festlegen
+            string bildname = "M" + Schraube.innenradius + "x" + Schraube.laenge;
+
+            //Standardhintergrund speichern
+            object[] arr1 = new object[3];
+            stg_catiaApp.ActiveWindow.ActiveViewer.GetBackgroundColor(arr1);
+
+        
+            //Hintergrund auf weiß setzen
+            object[] arr2 = new object[] { 1, 1, 1 };
+            stg_catiaApp.ActiveWindow.ActiveViewer.PutBackgroundColor(arr2);
+
+            //3D Kompass ausblenden
+            stg_catiaApp.StartCommand("CompassDisplayOff");
+            stg_catiaApp.ActiveWindow.ActiveViewer.Reframe();
+
+            INFITF.SettingControllers settingControllers1 = stg_catiaApp.SettingControllers;
+
+        //Screenshot wird erstellt und gespeichert
+        stg_catiaApp.ActiveWindow.ActiveViewer.CaptureToFile(CatCaptureFormat.catCaptureFormatBMP, "C:\\Windows\\Temp\\" + bildname + ".bmp");
+
+        //3D Kompass einblenden
+        stg_catiaApp.StartCommand("CompassDisplayOn");
+
+        //Setzt die Hintergrundfarbe auf Standard zurück
+        stg_catiaApp.ActiveWindow.ActiveViewer.PutBackgroundColor(arr1);
+
+        }
+    #endregion
+
+    public void Screenshot(string bildname)
         {
 
             object[] arr1 = new object[3];
@@ -1216,6 +1250,7 @@ namespace Schraubenprogramm
 
             stg_catiaApp.ActiveWindow.ActiveViewer.CaptureToFile(CatCaptureFormat.catCaptureFormatBMP, "C:\\Temp\\" + bildname + ".bmp");
         }
+
 
     }
 
