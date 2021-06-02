@@ -623,6 +623,10 @@ namespace Schraubenprogramm
                     {
                         MessageBox.Show("Negative Zahlen sind leider nicht möglich");
                     }
+                    else if(Zylinderdurchmesser <= Innenschlüsselweite + (Innenschlüsselweite/3))
+                    {
+                        MessageBox.Show("Bitte größeren Zylinderkopf wählen");
+                    }
                     else
                     {
                         gr_AnAnpassung.Visibility = Visibility.Hidden;
