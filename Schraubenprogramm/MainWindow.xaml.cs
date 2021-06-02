@@ -1995,9 +1995,38 @@ namespace Schraubenprogramm
         }
         #endregion
 
+        //Catia Anbindung für Normteile
+        #region Normteile
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            CatiaControl cc = new CatiaControl();
+
+
+
+
+
+
+
+            //Läuft Catia ? 
+            cc.CatiaLäuft();
+
+            //Part erzeugen 
+            cc.ErzeugePart();
+
+            //Skizze für den Schaft erzeugen
+            cc.NG_ErzeugeSchaftSkizze();
+
+
+        }
+
+
 
 
         #endregion
+
+        #endregion
+
+        
     }
 
 
