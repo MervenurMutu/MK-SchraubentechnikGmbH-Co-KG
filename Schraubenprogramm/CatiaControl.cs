@@ -29,7 +29,107 @@ namespace Schraubenprogramm
         OriginElements catOriginElements;
         HybridShapePlaneOffset hybridShapePlaneOffset1;
 
-       
+        //Achsensysteme erzeugen
+        #region Achsensysteme erzeugen 
+        //Achsensystem für Anpassung Schaft
+        private void ErzeugeAchsensystem()
+        {
+            object[] array = new object[]
+            {
+                0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+            stg_catiaSchaftProfil.SetAbsoluteAxisData(array);
+        }
+        //Achsensystem für normgerechter Schaft
+        private void NG_ErzeugeAchsensystem()
+        {
+            object[] array = new object[]
+            {
+                0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+            stg_NG_CatiaSchaftProfil.SetAbsoluteAxisData(array);
+        }
+        //Achsensystem für normgerechter Kopf
+        private void NG_ErzeugeAchsensystem2()
+        {
+            object[] array = new object[]
+            {
+                0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+            stg_NG_catiaKopfProfil.SetAbsoluteAxisData(array);
+        }
+        #endregion
+
+        //Catia Läuft
+        #region Catia läuft
+        internal bool CatiaLäuft()
+        {
+
+
+            try
+            {
+                object CatiaObject = System.Runtime.InteropServices.Marshal.GetActiveObject("CATIA.Application");
+                stg_catiaApp = (INFITF.Application)CatiaObject;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
+
+        //Part erzeugen und öffnen
+        #region Part erzeugen
+        internal void ErzeugePart()
+        {
+            Documents CatDocument = (Documents)stg_catiaApp.Documents;
+            stg_catiaPart = (PartDocument)CatDocument.Add("Part");
+        }
+        #endregion
+
+        //ANPASSUNG
+        //SCHAFT
+        //Skizze für Schaft erzeugen
+        #region Skizze erzeugen
+        internal void ErzeugeSchaftSkizze()        //Schaft Skizze erzeugen 
+        {
+            SF2D = (ShapeFactory)stg_catiaPart.Part.ShapeFactory;
+            HybridBodies HybridBodySchaft1 = stg_catiaPart.Part.HybridBodies;
+            HybridBody catHybridBodySchaft1;
+
+
+            try
+            {
+                catHybridBodySchaft1 = HybridBodySchaft1.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+
+
+            catSketches = catHybridBodySchaft1.HybridSketches;
+            catOriginElements = stg_catiaPart.Part.OriginElements;
+            Reference catref = (Reference)catOriginElements.PlaneYZ;
+            stg_catiaSchaftProfil = catSketches.Add(catref);
+
+            ErzeugeAchsensystem();
+
+            stg_catiaPart.Part.Update();
+
+
+        }
+        #endregion
 
         //Schraubenschaft mit Gewinde erzeugen
         #region Schraubenschaft definieren
