@@ -1623,6 +1623,8 @@ namespace Schraubenprogramm
 
                         MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
                         pb_1.Value = 0;
+
+                        cc.Screenshot("Schraube");
                     }
                     else
                     {
@@ -1767,6 +1769,8 @@ namespace Schraubenprogramm
 
                             MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
                             pb_1.Value = 0;
+
+                            cc.Screenshot("Schraube");
                         }
                         else
                         {
@@ -1892,6 +1896,7 @@ namespace Schraubenprogramm
 
                         MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
                         pb_1.Value = 0;
+                        cc.Screenshot("Schraube");
                     }
                     else
                     {
@@ -2031,11 +2036,12 @@ namespace Schraubenprogramm
 
 
 
-        #endregion
 
         #endregion
 
-        
+        #endregion
+
+     
     }
 
 
