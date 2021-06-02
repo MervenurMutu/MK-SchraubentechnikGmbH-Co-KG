@@ -36,19 +36,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.HybridShapeTypeLib">
-<<<<<<< Updated upstream
       <HintPath>..\..\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.KnowledgewareTypeLib">
       <HintPath>..\..\Neuer Ordner\Interop.KnowledgewareTypeLib.dll</HintPath>
-=======
-      <HintPath>..\..\..\..\..\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.HybridShapeTypeLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.KnowledgewareTypeLib">
-      <HintPath>..\..\..\..\..\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.KnowledgewareTypeLib.dll</HintPath>
->>>>>>> Stashed changes
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.ProductStructureTypeLib">
