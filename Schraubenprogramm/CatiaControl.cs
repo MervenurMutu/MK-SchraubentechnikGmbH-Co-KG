@@ -765,16 +765,21 @@ namespace Schraubenprogramm
 
             //Kantenverrundung Kopf
             #region Kantenverrundung Kopf
-            Reference refernz1 = catPart.CreateReferenceFromName("");
+            if (itsKopfeigenschaften.zylinderdurchmesser >= 2)
+            {
 
-            CatFilletEdgePropagation catEdgeProp = CatFilletEdgePropagation.catTangencyFilletEdgePropagation;
+                
+                Reference refernz1 = catPart.CreateReferenceFromName("");
 
-            ConstRadEdgeFillet kantenverrundung1 = SF2D.AddNewEdgeFilletWithConstantRadius(referenz1, catEdgeProp, 2);
+                CatFilletEdgePropagation catEdgeProp = CatFilletEdgePropagation.catTangencyFilletEdgePropagation;
 
-            Reference referenz2 = catPart.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:(Pad.2;0:(Brp:(Sketch.5;1)));None:();Cf11:());Face:(Brp:(Pad.2;2);None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", catKopfTasche);
-            kantenverrundung1.AddObjectToFillet(referenz2);
+                ConstRadEdgeFillet kantenverrundung1 = SF2D.AddNewEdgeFilletWithConstantRadius(referenz1, catEdgeProp, 2);
 
-            stg_catiaPart.Part.Update();
+                Reference referenz2 = catPart.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:(Pad.2;0:(Brp:(Sketch.5;1)));None:();Cf11:());Face:(Brp:(Pad.2;2);None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", catKopfTasche);
+                kantenverrundung1.AddObjectToFillet(referenz2);
+
+                stg_catiaPart.Part.Update();
+            }
             #endregion
         }
         #endregion
