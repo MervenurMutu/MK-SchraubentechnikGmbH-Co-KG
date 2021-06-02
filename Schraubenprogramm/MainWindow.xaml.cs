@@ -1347,6 +1347,557 @@ namespace Schraubenprogramm
         //CATIA ANPASSUNG
         #region CATIA Anpassung
 
+        //CATIA Anpassung für Individuelles Schraubendesign
+        #region Catia Anbindung Individuelle Anpassung
+        private void Button_Anppasung_Catia_Part_Click(object sender, RoutedEventArgs e)
+        {
+            btn_Catia_An_Betrachtung.IsEnabled = false;
+
+            CatiaControl cc = new CatiaControl();
+
+            pb_1.Minimum = 0;
+            pb_1.Maximum = 5;
+
+
+            //Abfragen und Programmdurchlauf für den Innensechskant
+            #region Innensechskantkopf
+            if (tvi_AnInnensechskant.IsSelected == true)
+            {
+                Schraube testingSchaft = new Schraube(0, 0, "", "", 0, 0, 0);
+                testingSchaft.innenradius = Convert.ToDouble(tb_AnGewindedurchmesser.Text);
+                Innensechskantkopf testingKopf = new Innensechskantkopf(0, 0, 0, 0, "");
+                testingKopf.zylinderdurchmesser = Convert.ToDouble(tb_An_In_Zylinderdurchmesser.Text);
+
+                pb_1.Value = 1;
+
+
+                string itsMaterialmitgabe = cb_An_wertstoffauswahl.Text;
+
+                if (testingKopf.zylinderdurchmesser <= testingSchaft.innenradius)
+                {
+                    MessageBoxResult result = MessageBox.Show("Schraubenkopf ist kleiner als Schaftdurchmesser. Fortfahren ?", "Warnung", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        #region Programmdurchlauf
+                        //Catia Check
+                        if (cc.CatiaLäuft())
+                        {
+
+                            //Part suchen und öffnen
+                            #region Part erstellen
+                            cc.ErzeugePart();
+                            #endregion
+
+                            //Schaft mit Gewinde wird erzeugt
+                            #region Schaft erzeugen
+                            //Skizze für Schaft erzeugen
+                            cc.ErzeugeSchaftSkizze();
+
+
+
+                            cc.ErzeugeMaterial(itsMaterialmitgabe);
+
+                            //Schaft Profil und Block erzeugen
+                            Schraube itsSchraubeneigenschaften = new Schraube(0, 0, "", "", 0, 0, 0);      //neue Schraube erstellen und Eigenschaften aus den Textfeldern zuweisen
+                            itsSchraubeneigenschaften.gewindeLaenge = Convert.ToDouble(tb_AnGewindelänge.Text);
+                            itsSchraubeneigenschaften.laenge = Convert.ToDouble(tb_AnSchaftlänge.Text) + Convert.ToDouble(tb_AnGewindelänge.Text);
+                            itsSchraubeneigenschaften.innenradius = Convert.ToDouble(tb_AnGewindedurchmesser.Text) / 2;
+                            itsSchraubeneigenschaften.steigung = Convert.ToDouble(tb_An_Gewindesteigung.Text);
+
+                            pb_1.Value = 2;
+
+                            cc.ErzeugeSchaftBlock(itsSchraubeneigenschaften);
+
+                            pb_1.Value = 3;
+
+                            string gewindeart = "";
+                            if (cb_An_MetrischesFeingewinde.IsSelected == true)
+                            {
+                                gewindeart = "Withworth";
+                            }
+                            else if (cb_An_Trapezgewinde.IsSelected == true)
+                            {
+                                gewindeart = "Trapez";
+                            }
+                            else if (cb_An_Sägengewinde.IsSelected == true)
+                            {
+                                gewindeart = "Sägen";
+                            }
+                            else if (cb_An_MetrischesGewinde.IsSelected == true)
+                            {
+                                gewindeart = "Withworth";
+                            }
+
+                            //Gewinde erzeugen
+                            cc.ErzeugeGewindeHelix(itsSchraubeneigenschaften, gewindeart);
+                            #endregion
+
+                            pb_1.Value = 4;
+
+
+                            //Schraubenkopf erzeugen 
+                            //Innensechskantkopf
+                            #region Innensechskantkopf
+                            if (tvi_AnInnensechskant.IsSelected == true)
+                            {
+                                Innensechskantkopf itsKopfeigenschaften = new Innensechskantkopf(0, 0, 0, 0, "");
+                                itsKopfeigenschaften.zylinderdurchmesser = Convert.ToDouble(tb_An_In_Zylinderdurchmesser.Text);
+                                itsKopfeigenschaften.höhe = Convert.ToDouble(tb_An_In_Kopfhöhe.Text);
+                                itsKopfeigenschaften.innenhöhe = Convert.ToDouble(tb_An_Innenkopfhöhe.Text);
+
+                                itsKopfeigenschaften.innenschlüsselweite = Convert.ToDouble(tb_An_In_Innenschlüsselweite.Text);
+
+                                double entfernung = itsSchraubeneigenschaften.laenge;
+
+                                if (itsKopfeigenschaften.zylinderdurchmesser <= itsKopfeigenschaften.innenschlüsselweite || itsKopfeigenschaften.innenhöhe >= itsKopfeigenschaften.höhe)
+                                {
+                                    MessageBox.Show("Kopf konnte nicht geladen werden. Bitte mit geeigneten Werten erneut versuchen");
+                                }
+                                else
+                                {
+                                    cc.ErzeugeInnensechskantkopfSkizze(entfernung);
+                                    cc.ErzeugeInnensechskantkopfProfil(itsKopfeigenschaften);
+                                    cc.ErzeugeInnenTasche(itsKopfeigenschaften);
+                                }
+
+
+                            }
+                            #endregion
+
+                            //Vier-/ oder Sechskantkopf
+                            #region Vier-/Sechskantkopf
+                            else if (tvi_AnSechkant.IsSelected || tvi_AnVierkant.IsSelected == true)
+                            {
+                                Schraubenkopf itsKopfeigenschaften = new Schraubenkopf(0, 0, "");             //Kopfeigenschaften aus der Textbox
+                                itsKopfeigenschaften.breite = Convert.ToDouble(tb_AnKopfbreite.Text);
+                                itsKopfeigenschaften.höhe = Convert.ToDouble(tb_AnKopfhöhe.Text);
+
+                                double entfernung = itsSchraubeneigenschaften.laenge;
+
+                                cc.ErzeugeKopfSkizze(entfernung);
+
+                                if (tvi_AnSechkant.IsSelected == true)
+                                {
+                                    cc.ErzeugeSechskantKopfProfil(itsKopfeigenschaften);
+                                }
+                                else if (tvi_AnVierkant.IsSelected == true)
+                                {
+                                    cc.ErzeugeVierkantKopfProfil(itsKopfeigenschaften);
+                                }
+                            }
+                            #endregion
+
+                            pb_1.Value = 5;
+
+                            MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
+                            pb_1.Value = 0;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Laufende Catia Application nicht gefunden");
+                        }
+                        #endregion
+                    }
+                    else if (result == MessageBoxResult.No)
+                    {
+
+                    }
+                }
+                else
+
+                {
+                    #region Programdurchlauf
+                    //Catia Check
+                    if (cc.CatiaLäuft())
+                    {
+
+                        //Part suchen und öffnen
+                        #region Part erstellen
+                        cc.ErzeugePart();
+                        #endregion
+
+                        pb_1.Value = 1;
+
+                        //Schaft mit Gewinde wird erzeugt
+                        #region Schaft erzeugen
+                        //Skizze für Schaft erzeugen
+                        cc.ErzeugeSchaftSkizze();
+
+                        pb_1.Value = 2;
+
+                        cc.ErzeugeMaterial(itsMaterialmitgabe);
+
+                        //Schaft Profil und Block erzeugen
+                        Schraube itsSchraubeneigenschaften = new Schraube(0, 0, "", "", 0, 0, 0);      //neue Schraube erstellen und Eigenschaften aus den Textfeldern zuweisen
+                        itsSchraubeneigenschaften.gewindeLaenge = Convert.ToDouble(tb_AnGewindelänge.Text);
+                        itsSchraubeneigenschaften.laenge = Convert.ToDouble(tb_AnSchaftlänge.Text) + Convert.ToDouble(tb_AnGewindelänge.Text);
+                        itsSchraubeneigenschaften.innenradius = Convert.ToDouble(tb_AnGewindedurchmesser.Text) / 2;
+                        itsSchraubeneigenschaften.steigung = 3;
+
+                        cc.ErzeugeSchaftBlock(itsSchraubeneigenschaften);
+
+                        pb_1.Value = 3;
+
+                        string gewindeart = "";
+                        if (cb_An_MetrischesFeingewinde.IsSelected == true)
+                        {
+                            gewindeart = "Withworth";
+                        }
+                        else if (cb_An_Trapezgewinde.IsSelected == true)
+                        {
+                            gewindeart = "Trapez";
+                        }
+                        else if (cb_An_Sägengewinde.IsSelected == true)
+                        {
+                            gewindeart = "Sägen";
+                        }
+                        else if (cb_An_MetrischesGewinde.IsSelected == true)
+                        {
+                            gewindeart = "Withworth";
+                        }
+
+                        //Gewinde erzeugen
+                        cc.ErzeugeGewindeHelix(itsSchraubeneigenschaften, gewindeart);
+                        #endregion
+
+                        pb_1.Value = 4;
+
+                        //Schraubenkopf erzeugen 
+                        //Innensechskantkopf
+                        #region Innensechskantkopf
+                        if (tvi_AnInnensechskant.IsSelected == true)
+                        {
+                            Innensechskantkopf itsKopfeigenschaften = new Innensechskantkopf(0, 0, 0, 0, "");
+                            itsKopfeigenschaften.zylinderdurchmesser = Convert.ToDouble(tb_An_In_Zylinderdurchmesser.Text);
+                            itsKopfeigenschaften.höhe = Convert.ToDouble(tb_An_In_Kopfhöhe.Text);
+                            itsKopfeigenschaften.innenhöhe = Convert.ToDouble(tb_An_Innenkopfhöhe.Text);
+
+                            itsKopfeigenschaften.innenschlüsselweite = Convert.ToDouble(tb_An_In_Innenschlüsselweite.Text);
+
+                            double entfernung = itsSchraubeneigenschaften.laenge;
+
+                            if (itsKopfeigenschaften.zylinderdurchmesser <= itsKopfeigenschaften.innenschlüsselweite || itsKopfeigenschaften.innenhöhe >= itsKopfeigenschaften.höhe)
+                            {
+                                MessageBox.Show("Kopf konnte nicht geladen werden. Bitte mit geeigneten Werten erneut versuchen");
+                            }
+                            else
+                            {
+                                cc.ErzeugeInnensechskantkopfSkizze(entfernung);
+                                cc.ErzeugeInnensechskantkopfProfil(itsKopfeigenschaften);
+                                cc.ErzeugeInnenTasche(itsKopfeigenschaften);
+                            }
+
+
+                        }
+                        #endregion
+
+                        //Vier-/ oder Sechskantkopf
+                        #region Vier-/Sechskantkopf
+                        else if (tvi_AnSechkant.IsSelected || tvi_AnVierkant.IsSelected == true)
+                        {
+                            Schraubenkopf itsKopfeigenschaften = new Schraubenkopf(0, 0, "");             //Kopfeigenschaften aus der Textbox
+                            itsKopfeigenschaften.breite = Convert.ToDouble(tb_AnKopfbreite.Text);
+                            itsKopfeigenschaften.höhe = Convert.ToDouble(tb_AnKopfhöhe.Text);
+
+                            double entfernung = itsSchraubeneigenschaften.laenge;
+
+                            cc.ErzeugeKopfSkizze(entfernung);
+
+                            if (tvi_AnSechkant.IsSelected == true)
+                            {
+                                cc.ErzeugeSechskantKopfProfil(itsKopfeigenschaften);
+                            }
+                            else if (tvi_AnVierkant.IsSelected == true)
+                            {
+                                cc.ErzeugeVierkantKopfProfil(itsKopfeigenschaften);
+                            }
+                        }
+                        #endregion
+
+                        pb_1.Value = 5;
+
+                        MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
+                        pb_1.Value = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Laufende Catia Application nicht gefunden");
+                    }
+                    #endregion
+                }
+            }
+            #endregion
+
+            //Abfragen und Programmdurchlauf für den Vierkant oder Sechskant
+            #region Vier-/ Sechskant
+            else if (tvi_AnSechkant.IsSelected == true || tvi_AnVierkant.IsSelected == true)
+            {
+                Schraube testingSchaft = new Schraube(0, 0, "", "", 0, 0, 0);
+                testingSchaft.innenradius = Convert.ToDouble(tb_AnGewindedurchmesser.Text);
+                Schraubenkopf testingKopf = new Schraubenkopf(0, 0, "");
+                testingKopf.breite = Convert.ToDouble(tb_AnKopfbreite.Text);
+                testingSchaft.steigung = Convert.ToDouble(tb_An_Gewindesteigung.Text);
+                if (1 >= testingSchaft.steigung || testingSchaft.steigung >= 4)
+                {
+                    MessageBox.Show("Bitte Steigung zwischen 1 und 4 wählen. Neuerungen sind im nächsten Update zu erwarten");
+                }
+
+
+
+                else if (testingKopf.breite <= testingSchaft.innenradius)
+                {
+                    MessageBoxResult result = MessageBox.Show("Schraubenkopf ist kleiner als Schaftdurchmesser. Fortfahren ?", "Warnung", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        #region Programmdurchlauf
+                        //Catia Check
+                        if (cc.CatiaLäuft())
+                        {
+                            pb_1.Value = 1;
+
+                            //Part suchen und öffnen
+                            #region Part erstellen
+                            cc.ErzeugePart();
+                            #endregion
+
+                            pb_1.Value = 2;
+
+                            //Schaft mit Gewinde wird erzeugt
+                            #region Schaft erzeugen
+                            //Skizze für Schaft erzeugen
+                            cc.ErzeugeSchaftSkizze();
+
+                            pb_1.Value = 3;
+
+                            //Schaft Profil und Block erzeugen
+                            Schraube itsSchraubeneigenschaften = new Schraube(0, 0, "", "", 0, 0, 0);      //neue Schraube erstellen und Eigenschaften aus den Textfeldern zuweisen
+                            itsSchraubeneigenschaften.gewindeLaenge = Convert.ToDouble(tb_AnGewindelänge.Text);
+                            itsSchraubeneigenschaften.laenge = Convert.ToDouble(tb_AnSchaftlänge.Text) + Convert.ToDouble(tb_AnGewindelänge.Text);
+                            itsSchraubeneigenschaften.innenradius = Convert.ToDouble(tb_AnGewindedurchmesser.Text) / 2;
+                            itsSchraubeneigenschaften.steigung = Convert.ToDouble(tb_An_Gewindesteigung.Text);
+
+                            cc.ErzeugeSchaftBlock(itsSchraubeneigenschaften);
+
+                            string gewindeart = "";
+                            if (cb_An_MetrischesFeingewinde.IsSelected == true)
+                            {
+                                gewindeart = "Withworth";
+                            }
+                            else if (cb_An_Trapezgewinde.IsSelected == true)
+                            {
+                                gewindeart = "Trapez";
+                            }
+                            else if (cb_An_Sägengewinde.IsSelected == true)
+                            {
+                                gewindeart = "Sägen";
+                            }
+                            else if (cb_An_MetrischesGewinde.IsSelected == true)
+                            {
+                                gewindeart = "Withworth";
+                            }
+
+                            //Gewinde erzeugen
+                            cc.ErzeugeGewindeHelix(itsSchraubeneigenschaften, gewindeart);
+                            #endregion
+
+                            pb_1.Value = 4;
+
+                            //Schraubenkopf erzeugen 
+                            //Innensechskantkopf
+                            #region Innensechskantkopf
+                            if (tvi_AnInnensechskant.IsSelected == true)
+                            {
+                                Innensechskantkopf itsKopfeigenschaften = new Innensechskantkopf(0, 0, 0, 0, "");
+                                itsKopfeigenschaften.zylinderdurchmesser = Convert.ToDouble(tb_An_In_Zylinderdurchmesser.Text);
+                                itsKopfeigenschaften.höhe = Convert.ToDouble(tb_An_In_Kopfhöhe.Text);
+                                itsKopfeigenschaften.innenhöhe = Convert.ToDouble(tb_An_Innenkopfhöhe.Text);
+                                itsKopfeigenschaften.innenhöhe = Convert.ToDouble(tb_An_In_Innenschlüsselweite.Text);
+                                itsKopfeigenschaften.innenschlüsselweite = Convert.ToDouble(tb_An_In_Innenschlüsselweite.Text);
+
+
+                                double entfernung = itsSchraubeneigenschaften.laenge;
+
+                                if (itsKopfeigenschaften.zylinderdurchmesser <= itsKopfeigenschaften.innenschlüsselweite || itsKopfeigenschaften.innenhöhe >= itsKopfeigenschaften.höhe)
+                                {
+                                    MessageBox.Show("Kopf konnte nicht geladen werden. Bitte mit geeigneten Werten erneut versuchen");
+                                }
+                                else
+                                {
+                                    cc.ErzeugeInnensechskantkopfSkizze(entfernung);
+                                    cc.ErzeugeInnensechskantkopfProfil(itsKopfeigenschaften);
+                                    cc.ErzeugeInnenTasche(itsKopfeigenschaften);
+                                }
+
+
+                            }
+                            #endregion
+
+                            //Vier-/ oder Sechskantkopf
+                            #region Vier-/Sechskantkopf
+                            else if (tvi_AnSechkant.IsSelected || tvi_AnVierkant.IsSelected == true)
+                            {
+                                Schraubenkopf itsKopfeigenschaften = new Schraubenkopf(0, 0, "");             //Kopfeigenschaften aus der Textbox
+                                itsKopfeigenschaften.breite = Convert.ToDouble(tb_AnKopfbreite.Text);
+                                itsKopfeigenschaften.höhe = Convert.ToDouble(tb_AnKopfhöhe.Text);
+
+                                double entfernung = itsSchraubeneigenschaften.laenge;
+
+                                cc.ErzeugeKopfSkizze(entfernung);
+
+                                if (tvi_AnSechkant.IsSelected == true)
+                                {
+                                    cc.ErzeugeSechskantKopfProfil(itsKopfeigenschaften);
+                                }
+                                else if (tvi_AnVierkant.IsSelected == true)
+                                {
+                                    cc.ErzeugeVierkantKopfProfil(itsKopfeigenschaften);
+                                }
+                            }
+                            #endregion
+
+                            pb_1.Value = 5;
+
+                            MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
+                            pb_1.Value = 0;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Laufende Catia Application nicht gefunden");
+                        }
+                        #endregion
+                    }
+                    else if (result == MessageBoxResult.No)
+                    {
+
+                    }
+                }
+                else
+
+                {
+                    #region Programdurchlauf
+                    //Catia Check
+                    if (cc.CatiaLäuft())
+                    {
+                        pb_1.Value = 1;
+                        //Part suchen und öffnen
+                        #region Part erstellen
+                        cc.ErzeugePart();
+                        #endregion
+
+                        pb_1.Value = 2;
+                        //Schaft mit Gewinde wird erzeugt
+                        #region Schaft erzeugen
+                        //Skizze für Schaft erzeugen
+                        cc.ErzeugeSchaftSkizze();
+
+                        //Schaft Profil und Block erzeugen
+                        Schraube itsSchraubeneigenschaften = new Schraube(0, 0, "", "", 0, 0, 0);      //neue Schraube erstellen und Eigenschaften aus den Textfeldern zuweisen
+                        itsSchraubeneigenschaften.gewindeLaenge = Convert.ToDouble(tb_AnGewindelänge.Text);
+                        itsSchraubeneigenschaften.laenge = Convert.ToDouble(tb_AnSchaftlänge.Text) + Convert.ToDouble(tb_AnGewindelänge.Text);
+                        itsSchraubeneigenschaften.innenradius = Convert.ToDouble(tb_AnGewindedurchmesser.Text) / 2;
+                        itsSchraubeneigenschaften.steigung = Convert.ToDouble(tb_An_Gewindesteigung.Text);
+
+                        cc.ErzeugeSchaftBlock(itsSchraubeneigenschaften);
+
+                        string gewindeart = "";
+                        if (cb_An_MetrischesFeingewinde.IsSelected == true)
+                        {
+                            gewindeart = "Withworth";
+                        }
+                        else if (cb_An_Trapezgewinde.IsSelected == true)
+                        {
+                            gewindeart = "Trapez";
+                        }
+                        else if (cb_An_Sägengewinde.IsSelected == true)
+                        {
+                            gewindeart = "Sägen";
+                        }
+                        else if (cb_An_MetrischesGewinde.IsSelected == true)
+                        {
+                            gewindeart = "Withworth";
+                        }
+
+                        //Gewinde erzeugen
+                        cc.ErzeugeGewindeHelix(itsSchraubeneigenschaften, gewindeart);
+                        #endregion
+
+                        pb_1.Value = 3;
+                        //Schraubenkopf erzeugen 
+                        //Innensechskantkopf
+                        #region Innensechskantkopf
+                        if (tvi_AnInnensechskant.IsSelected == true)
+                        {
+                            Innensechskantkopf itsKopfeigenschaften = new Innensechskantkopf(0, 0, 0, 0, "");
+                            itsKopfeigenschaften.zylinderdurchmesser = Convert.ToDouble(tb_An_In_Zylinderdurchmesser.Text);
+                            itsKopfeigenschaften.höhe = Convert.ToDouble(tb_An_In_Kopfhöhe.Text);
+                            itsKopfeigenschaften.innenhöhe = Convert.ToDouble(tb_An_Innenkopfhöhe.Text);
+                            itsKopfeigenschaften.innenhöhe = Convert.ToDouble(tb_An_In_Innenschlüsselweite.Text);
+                            itsKopfeigenschaften.innenschlüsselweite = Convert.ToDouble(tb_An_In_Innenschlüsselweite.Text);
+
+                            double entfernung = itsSchraubeneigenschaften.laenge;
+
+                            if (itsKopfeigenschaften.zylinderdurchmesser <= itsKopfeigenschaften.innenschlüsselweite || itsKopfeigenschaften.innenhöhe >= itsKopfeigenschaften.höhe)
+                            {
+                                MessageBox.Show("Kopf konnte nicht geladen werden. Bitte mit geeigneten Werten erneut versuchen");
+                            }
+                            else
+                            {
+                                cc.ErzeugeInnensechskantkopfSkizze(entfernung);
+                                cc.ErzeugeInnensechskantkopfProfil(itsKopfeigenschaften);
+                                cc.ErzeugeInnenTasche(itsKopfeigenschaften);
+                            }
+
+
+                        }
+                        #endregion
+
+
+
+                        //Vier-/ oder Sechskantkopf
+                        #region Vier-/Sechskantkopf
+                        else if (tvi_AnSechkant.IsSelected || tvi_AnVierkant.IsSelected == true)
+                        {
+                            Schraubenkopf itsKopfeigenschaften = new Schraubenkopf(0, 0, "");             //Kopfeigenschaften aus der Textbox
+                            itsKopfeigenschaften.breite = Convert.ToDouble(tb_AnKopfbreite.Text);
+                            itsKopfeigenschaften.höhe = Convert.ToDouble(tb_AnKopfhöhe.Text);
+
+                            double entfernung = itsSchraubeneigenschaften.laenge;
+
+                            cc.ErzeugeKopfSkizze(entfernung);
+
+                            if (tvi_AnSechkant.IsSelected == true)
+                            {
+                                cc.ErzeugeSechskantKopfProfil(itsKopfeigenschaften);
+                            }
+                            else if (tvi_AnVierkant.IsSelected == true)
+                            {
+                                cc.ErzeugeVierkantKopfProfil(itsKopfeigenschaften);
+                            }
+                        }
+                        #endregion
+
+                        pb_1.Value = 4;
+                        pb_1.Value = 5;
+
+                        MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
+                        pb_1.Value = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Laufende Catia Application nicht gefunden");
+                    }
+                    #endregion
+                }
+
+
+            }
+            #endregion
+
+        }
+
+        #endregion
 
         //CATIA Anbindung für Normgerechtes Partdesign       
         #region Catia Anbindung für Normgewinde
