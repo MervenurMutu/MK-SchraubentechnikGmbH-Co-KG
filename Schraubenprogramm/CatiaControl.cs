@@ -570,6 +570,48 @@ namespace Schraubenprogramm
 
             stg_catiaPart.Part.Update();
 
+
+            //Fase und Kantenverrundungen
+            #region Fase und Kantenverrundungen
+            Reference referenz3 = catPart.CreateReferenceFromName("");
+
+            CatFilletEdgePropagation catEdgeProp1 = CatFilletEdgePropagation.catTangencyFilletEdgePropagation;
+            ConstRadEdgeFillet kantenverrundung1 = SF2D.AddNewEdgeFilletWithConstantRadius(referenz3, catEdgeProp1 ,0.3 * höhe);
+
+            Reference referenz4 = catPart.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:(Pad.3;0:(Brp:(Sketch.4;1)));None:();Cf11:());Face:(Brp:(Pad.3;2);None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", SchutzBlock1);
+
+            kantenverrundung1.AddObjectToFillet(referenz4);
+
+            Reference referenz5 = catPart.CreateReferenceFromName("");
+
+            CatFilletEdgePropagation catEdgeProp2 = CatFilletEdgePropagation.catTangencyFilletEdgePropagation;
+            ConstRadEdgeFillet kantenverrundung2 = SF2D.AddNewEdgeFilletWithConstantRadius(referenz5, catEdgeProp2, 0.3 * höhe);
+
+            Reference referenz6 = catPart.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:((Brp:(Pad.3;1);Brp:(Pad.2;1)));None:();Cf11:());Face:(Brp:(Pad.3;0:(Brp:(Sketch.4;1)));None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", SchutzBlock1);
+
+            kantenverrundung2.AddObjectToFillet(referenz6);
+
+            stg_catiaPart.Part.Update();
+
+            if (kopfhöhe > 2)
+            {
+
+                Reference referenz7 = catPart.CreateReferenceFromName("");
+
+                CatChamferPropagation catChamProp = CatChamferPropagation.catTangencyChamfer;
+                CatChamferOrientation CatChamOrien = CatChamferOrientation.catNoReverseChamfer;
+                CatChamferMode catChamMode = CatChamferMode.catLengthAngleChamfer;
+
+                Chamfer Fase2 = SF2D.AddNewChamfer(referenz7, catChamProp, catChamMode, CatChamOrien, 1, 45);
+
+                Reference referenz8 = catPart.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.2;2);None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", kantenverrundung2);
+
+                Fase2.AddElementToChamfer(referenz8);
+
+                stg_catiaPart.Part.Update();
+
+            }
+            #endregion
         }
         #endregion
 
@@ -765,7 +807,7 @@ namespace Schraubenprogramm
 
             //Kantenverrundung Kopf
             #region Kantenverrundung Kopf
-            if (itsKopfeigenschaften.zylinderdurchmesser >= 2)
+            if (itsKopfeigenschaften.zylinderdurchmesser >= (itsKopfeigenschaften.innenschlüsselweite/2) + itsKopfeigenschaften.innenschlüsselweite && itsKopfeigenschaften.zylinderdurchmesser >= 2)
             {
 
                 
@@ -779,7 +821,11 @@ namespace Schraubenprogramm
                 kantenverrundung1.AddObjectToFillet(referenz2);
 
                 stg_catiaPart.Part.Update();
+
+                
             }
+            
+            
             #endregion
         }
         #endregion
@@ -1143,6 +1189,33 @@ namespace Schraubenprogramm
         #endregion
 
 
+        public void Screenshot(string bildname)
+        {
+
+            object[] arr1 = new object[3];
+            stg_catiaApp.ActiveWindow.ActiveViewer.GetBackgroundColor(arr1);
+            Console.WriteLine("Col: " + arr1[0] + " " + arr1[1] + " " + arr1[2]);
+
+            object[] arr2 = new object[] { 1, 1, 1 };
+            stg_catiaApp.ActiveWindow.ActiveViewer.PutBackgroundColor(arr2);
+
+            stg_catiaApp.StartCommand("CompassDisplayOff");
+            stg_catiaApp.ActiveWindow.ActiveViewer.Reframe();
+
+            // hsp_catiaApp.ActiveWindow.ActiveViewer.Viewpoint3D = INFITF.Viewpoint3D;
+            //int[] color = new int[3]; // Hintergundfarbe in Weiß setzen
+            //color[0] = 1;
+            //color[1] = 1;
+            //color[2] = 1;
+            // CATSafeArray color[] = new CATSafeArrayVariant[3];
+
+            INFITF.SettingControllers settingControllers1 = stg_catiaApp.SettingControllers;
+            //INFITF.VisualizationSettingAtt visualizationSettingAtt1 = settingControllers1.Item("CATVizVisualizationSettingCtrl");
+
+            // hsp_catiaApp.ActiveWindow.ActiveViewer.PutBackgroundColor(color);
+
+            stg_catiaApp.ActiveWindow.ActiveViewer.CaptureToFile(CatCaptureFormat.catCaptureFormatBMP, "C:\\Temp\\" + bildname + ".bmp");
+        }
 
     }
 
