@@ -26,12 +26,12 @@
         <!-- Header-->
         <Image x:Name="im_Begrüßung" Source="Begrüßung.png" Margin="107,20,-24,20" Grid.ColumnSpan="3" Grid.RowSpan="2" Visibility="Visible" />
 
-        <Button Click="Button_Click_1"></Button>
+        <Button Click="Button_Click_1" Visibility="Hidden"></Button>
 
         <!-- Infotext-->
         <Label x:Name="lbl_Infotext" Grid.Column="2" Margin="213,6,10,64" RenderTransformOrigin="0.5,0.5" Content="" FontSize="11" FontStyle="Oblique"/>
 
-
+        
         <!-- Logo definieren-->
         <Image x:Name="im_Logo" Grid.Column="0" Grid.Row="0" Margin="5,0,5,312" Source="Screen.png" Grid.RowSpan="2" Visibility="Hidden"/>
 
@@ -72,6 +72,7 @@
                 </Grid.RowDefinitions>
 
 
+               
 
 
                 <Grid>
@@ -630,12 +631,12 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        
-                        
+
+
                         <ProgressBar x:Name="pb_1" Margin="53,8,0,7" HorizontalAlignment="Left" Width="145" Grid.Column="1"/>
 
-                        
-                        
+
+
                         <!--Catia Anbindung-->
                         <Button x:Name="btn_Catia_An_Betrachtung" Grid.Row="4" Margin="12,5,172,15" Click="Button_Anppasung_Catia_Part_Click" IsEnabled="False">öffnen mit CATIA</Button>
 
