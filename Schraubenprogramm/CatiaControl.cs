@@ -679,9 +679,364 @@ namespace Schraubenprogramm
         #endregion
         #endregion
 
+        //NORMGERECHTES GEWINDE
+        //Skizze für Schaft erzeugen 
+        #region Schaft Skizze erzeugen
+        internal void NG_ErzeugeSchaftSkizze()
+        {
+            {
+                SF2D = (ShapeFactory)stg_catiaPart.Part.ShapeFactory;
+                HybridBodies HybridBodySchaft4 = stg_catiaPart.Part.HybridBodies;
+                HybridBody catHybridBodySchaft4;
 
 
-        
+                try
+                {
+                    catHybridBodySchaft4 = HybridBodySchaft4.Item("Geometrisches Set.1");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Fehler");
+                    return;
+                }
+
+
+                catSketches = catHybridBodySchaft4.HybridSketches;
+                catOriginElements = stg_catiaPart.Part.OriginElements;
+                Reference catref = (Reference)catOriginElements.PlaneYZ;
+                stg_NG_CatiaSchaftProfil = catSketches.Add(catref);
+
+                NG_ErzeugeAchsensystem();
+
+                stg_catiaPart.Part.Update();
+
+            }
+        }
+        #endregion
+
+        //Schaft als Block definieren
+        #region Schaft Block erzeugen 
+        internal void NG_ErzeugeSchaftBlock(Schraube Schraubeneigenschaften)
+        {
+            F2D = stg_NG_CatiaSchaftProfil.OpenEdition();
+
+            double durchmesser = Schraubeneigenschaften.innenradius;
+            double länge = Schraubeneigenschaften.laenge;
+            double gewindelänge = Schraubeneigenschaften.gewindeLaenge;
+
+            Point2D Mittelpunkt = F2D.CreatePoint(0, 0);
+            Circle2D SchaftProfil = F2D.CreateCircle(0, 0, durchmesser, 0, 0);
+            SchaftProfil.CenterPoint = Mittelpunkt;
+
+            stg_NG_CatiaSchaftProfil.CloseEdition();
+
+            stg_catiaPart.Part.InWorkObject = stg_catiaPart.Part.MainBody;
+
+            SF2D = (ShapeFactory)stg_catiaPart.Part.ShapeFactory;
+            Pad NG_SchaftBlock = SF2D.AddNewPad(stg_NG_CatiaSchaftProfil, länge);
+
+            stg_catiaPart.Part.Update();
+
+            Reference referenz1 = catPart.CreateReferenceFromName("");
+
+
+            CatChamferOrientation chamOrient = CatChamferOrientation.catNoReverseChamfer;
+            CatChamferPropagation chamProp = CatChamferPropagation.catTangencyChamfer;
+            CatChamferMode chamMode = CatChamferMode.catLengthAngleChamfer;
+            Chamfer Fase1 = SF2D.AddNewChamfer(referenz1, chamProp, chamMode, chamOrient, 1, 45);
+
+            Reference referenz2 = catPart.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;1)));None:();Cf11:());Face:(Brp:(Pad.1;2);None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", stg_NG_CatiaSchaftProfil);
+            Fase1.AddElementToChamfer(referenz2);
+
+            stg_catiaPart.Part.Update();
+
+            Reference RefMantelFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;1)));None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
+            Reference RefFrontFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;2);None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
+
+            //Gewinde erzeugen
+            PARTITF.Thread Gewinde1 = SF2D.AddNewThreadWithOutRef();
+            Gewinde1.LateralFaceElement = RefMantelFlaeche;
+            Gewinde1.LimitFaceElement = RefFrontFlaeche;
+            Gewinde1.Diameter = durchmesser * 2;
+            Gewinde1.Depth = gewindelänge;
+            Gewinde1.Side = CatThreadSide.catRightSide;
+
+            Gewinde1.CreateUserStandardDesignTable("Metric_Thick_Pitch", @"C:\Program Files\Dassault Systemes\B28\win_b64\resources\standard\thread\Metric_Thick_Pitch.xml");
+            Gewinde1.Diameter = durchmesser * 2;
+            Gewinde1.Pitch = 1.250000;
+
+            stg_catiaPart.Part.Update();
+
+
+
+
+
+        }
+        #endregion
+
+        //Kopf Skizze, Porfil und Block erzeugen 
+        #region Kopf Skizze und Block erzeugen 
+        internal void NG_ErzeugeKopfSkizze(Schraubenkopf NG_kopfeigenschaften, string kopfart)
+        {
+            //Skizze erzeugen 
+            double Kopfhöhe = NG_kopfeigenschaften.höhe;
+            double HalbeKopfbreite = (NG_kopfeigenschaften.breite) / 2;
+
+            SF2D = (ShapeFactory)stg_catiaPart.Part.ShapeFactory;
+            HybridBodies HybridBodySchaft5 = stg_catiaPart.Part.HybridBodies;
+            HybridBody catHybridBodySchaft4;
+
+
+            try
+            {
+                catHybridBodySchaft4 = HybridBodySchaft5.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+
+
+            catSketches = catHybridBodySchaft4.HybridSketches;
+            catOriginElements = stg_catiaPart.Part.OriginElements;
+            Reference catref = (Reference)catOriginElements.PlaneYZ;
+            stg_NG_catiaKopfProfil = catSketches.Add(catref);
+
+            NG_ErzeugeAchsensystem();
+
+            stg_catiaPart.Part.Update();
+
+            F2D = stg_NG_catiaKopfProfil.OpenEdition();
+
+            //Block erzeugen
+            #region Vierkantkopf
+            if (kopfart == "Vierkant")
+            {
+                Point2D Point2D_1 = F2D.CreatePoint(HalbeKopfbreite, HalbeKopfbreite);                   //Viereck erzeugen 
+                Point2D Point2D_2 = F2D.CreatePoint(-HalbeKopfbreite, HalbeKopfbreite);
+                Point2D Point2D_3 = F2D.CreatePoint(-HalbeKopfbreite, -HalbeKopfbreite);
+                Point2D Point2D_4 = F2D.CreatePoint(HalbeKopfbreite, -HalbeKopfbreite);
+
+                Line2D Line2D_1 = F2D.CreateLine(HalbeKopfbreite, HalbeKopfbreite, -HalbeKopfbreite, HalbeKopfbreite);
+                Line2D_1.StartPoint = Point2D_1;
+                Line2D_1.EndPoint = Point2D_2;
+                Line2D Line2D_2 = F2D.CreateLine(-HalbeKopfbreite, HalbeKopfbreite, -HalbeKopfbreite, -HalbeKopfbreite);
+                Line2D_2.StartPoint = Point2D_2;
+                Line2D_2.EndPoint = Point2D_3;
+                Line2D Line2D_3 = F2D.CreateLine(-HalbeKopfbreite, -HalbeKopfbreite, HalbeKopfbreite, -HalbeKopfbreite);
+                Line2D_3.StartPoint = Point2D_3;
+                Line2D_3.EndPoint = Point2D_4;
+                Line2D Line2D_4 = F2D.CreateLine(HalbeKopfbreite, -HalbeKopfbreite, HalbeKopfbreite, HalbeKopfbreite);
+                Line2D_4.StartPoint = Point2D_4;
+                Line2D_4.EndPoint = Point2D_1;
+
+                stg_NG_catiaKopfProfil.CloseEdition();
+                stg_catiaPart.Part.InWorkObject = stg_catiaPart.Part.MainBody;
+
+                SF2D = (ShapeFactory)stg_catiaPart.Part.ShapeFactory;                     //Block erzeugen 
+                Pad catKopfBlock = SF2D.AddNewPad(stg_NG_catiaKopfProfil, Kopfhöhe);
+                catKopfBlock.DirectionOrientation = CatPrismOrientation.catInverseOrientation;
+                catKopfBlock.set_Name("Schraubenkopf");
+
+                stg_catiaPart.Part.Update();
+
+                NG_ErzeugeUnterlegscheibe(HalbeKopfbreite, Kopfhöhe);
+            }
+            #endregion
+
+            #region Secchsantkopf
+            else if (kopfart == "Sechskant")
+            {
+                double HalbeLänge = (NG_kopfeigenschaften.breite) / 2;
+                double HalbeBreite = HalbeLänge * 0.4;
+
+
+                F2D = stg_NG_catiaKopfProfil.OpenEdition();
+
+                Point2D Point2D_1 = F2D.CreatePoint(HalbeBreite, HalbeLänge);                              //Sechseck erzeugen 
+                Point2D Point2D_2 = F2D.CreatePoint(-HalbeBreite, HalbeLänge);
+                Point2D Point2D_3 = F2D.CreatePoint(-HalbeLänge, HalbeBreite);
+                Point2D Point2D_4 = F2D.CreatePoint(-HalbeLänge, -HalbeBreite);
+                Point2D Point2D_5 = F2D.CreatePoint(-HalbeBreite, -HalbeLänge);
+                Point2D Point2D_6 = F2D.CreatePoint(HalbeBreite, -HalbeLänge);
+                Point2D Point2D_7 = F2D.CreatePoint(HalbeLänge, -HalbeBreite);
+                Point2D Point2D_8 = F2D.CreatePoint(HalbeLänge, HalbeBreite);
+
+                Line2D Line2D_1 = F2D.CreateLine(HalbeBreite, HalbeLänge, -HalbeBreite, HalbeLänge);
+                Line2D_1.StartPoint = Point2D_1;
+                Line2D_1.EndPoint = Point2D_2;
+
+                Line2D Line2D_2 = F2D.CreateLine(-HalbeBreite, HalbeLänge, -HalbeLänge, HalbeBreite);
+                Line2D_2.StartPoint = Point2D_2;
+                Line2D_2.EndPoint = Point2D_3;
+
+                Line2D Line2D_3 = F2D.CreateLine(-HalbeLänge, HalbeBreite, -HalbeLänge, -HalbeBreite);
+                Line2D_3.StartPoint = Point2D_3;
+                Line2D_3.EndPoint = Point2D_4;
+
+                Line2D Line2D_4 = F2D.CreateLine(-HalbeLänge, -HalbeBreite, -HalbeBreite, -HalbeLänge);
+                Line2D_4.StartPoint = Point2D_4;
+                Line2D_4.EndPoint = Point2D_5;
+
+                Line2D Line2D_5 = F2D.CreateLine(-HalbeBreite, -HalbeLänge, HalbeBreite, -HalbeLänge);
+                Line2D_5.StartPoint = Point2D_5;
+                Line2D_5.EndPoint = Point2D_6;
+
+                Line2D Line2D_6 = F2D.CreateLine(HalbeBreite, -HalbeLänge, HalbeLänge, -HalbeBreite);
+                Line2D_6.StartPoint = Point2D_6;
+                Line2D_6.EndPoint = Point2D_7;
+
+                Line2D Line2D_7 = F2D.CreateLine(HalbeLänge, -HalbeBreite, HalbeLänge, HalbeBreite);
+                Line2D_7.StartPoint = Point2D_7;
+                Line2D_7.EndPoint = Point2D_8;
+
+                Line2D Line2D_8 = F2D.CreateLine(HalbeLänge, HalbeBreite, HalbeBreite, HalbeLänge);
+                Line2D_8.StartPoint = Point2D_8;
+                Line2D_8.EndPoint = Point2D_1;
+
+                stg_NG_catiaKopfProfil.CloseEdition();                                                //Main Body in Bearbeitung definieren 
+                stg_catiaPart.Part.InWorkObject = stg_catiaPart.Part.MainBody;
+
+                Pad catKopfBlock = SF2D.AddNewPad(stg_NG_catiaKopfProfil, Kopfhöhe);                    //Sechskantkopf erzeugen 
+                catKopfBlock.DirectionOrientation = CatPrismOrientation.catInverseOrientation;
+                catKopfBlock.set_Name("Innensechskant");
+
+                stg_catiaPart.Part.Update();
+            }
+            #endregion
+
+
+        }
+
+        //Nur für Vierkantkopf: Schutzcheibe erzeugen
+        private void NG_ErzeugeUnterlegscheibe(double halbekopfbreite, double kopfhöhe)
+        {
+            double durchmesser = 2 * ((13 / 10) * halbekopfbreite);
+            double höhe = kopfhöhe / 10;
+
+            HybridBodies HybridBodySchutz4 = stg_catiaPart.Part.HybridBodies;
+            HybridBody catHybridBodySchutz4;
+
+            try
+            {
+                catHybridBodySchutz4 = HybridBodySchutz4.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+
+            catSketches = catHybridBodySchutz4.HybridSketches;
+            catOriginElements = stg_catiaPart.Part.OriginElements;
+            Reference catref = (Reference)catOriginElements.PlaneYZ;
+            MECMOD.Sketch stg_catiaSchutzProfil = catSketches.Add(catref);
+
+            NG_ErzeugeAchsensystem2();
+
+            F2D = stg_catiaSchutzProfil.OpenEdition();
+
+            Point2D Mittelpunkt1 = F2D.CreatePoint(0, 0);              //Profil erzeugen
+            Circle2D Schutz1 = F2D.CreateCircle(0, 0, durchmesser, 0, 0);
+            Schutz1.CenterPoint = Mittelpunkt1;
+
+            stg_catiaSchutzProfil.CloseEdition();
+
+            //Block erzeugen
+            stg_catiaPart.Part.InWorkObject = stg_catiaPart.Part.MainBody;
+
+            SF2D = (ShapeFactory)stg_catiaPart.Part.ShapeFactory;            //Block erzeugen
+            Pad SchutzBlock1 = SF2D.AddNewPad(stg_catiaSchutzProfil, höhe);
+            SchutzBlock1.DirectionOrientation = CatPrismOrientation.catInverseOrientation;
+            SchutzBlock1.set_Name("Schutzscheibe");
+
+            stg_catiaPart.Part.Update();
+        }
+
+        #endregion
+
+
+        //Material erzeugen 
+        #region Material
+        internal void ErzeugeMaterial(string materialmitgabe)
+        {
+            String sFilePath = @"C:\Program Files\Dassault Systemes\B28\win_b64\startup\materials\German\Catalog.CATMaterial";
+            MaterialDocument oMaterial_document = (MaterialDocument)stg_catiaApp.Documents.Open(sFilePath);
+            MaterialFamilies cFamilies_list = oMaterial_document.Families;
+
+            string materialangabe = "";
+
+            foreach (MaterialFamily mf in cFamilies_list)
+            {
+                Console.WriteLine(mf.get_Name());
+            }
+            #region Material
+            switch (materialmitgabe)
+            {
+                case "Stahl":
+                    {
+                        materialangabe = "Stahl";
+                    }
+                    break;
+                case "Eisen":
+                    {
+                        materialangabe = "Eisen";
+                    }
+                    break;
+                case "Messing":
+                    {
+                        materialangabe = "Messing";
+                    }
+                    break;
+                case "Gelbes Messing":
+                    {
+                        materialangabe = "Gelbes Messing";
+                    }
+                    break;
+                case "Kupfer":
+                    {
+                        materialangabe = "Kupfer";
+                    }
+                    break;
+                case "Aluminium":
+                    {
+                        materialangabe = "Aluminium";
+                    }
+                    break;
+                case "Silber":
+                    {
+                        materialangabe = "Silber";
+                    }
+                    break;
+
+
+            }
+            #endregion
+
+            MaterialFamily myMf = cFamilies_list.Item("Metall");
+            foreach (Material mat in myMf.Materials)
+            {
+                Console.WriteLine(mat.get_Name());
+            }
+
+            Material myStahl = myMf.Materials.Item(materialangabe);
+
+            MaterialManager partMatManager = stg_catiaPart.Part.GetItem("CATMatManagerVBExt") as MaterialManager;
+
+            // brauchen Sie Stahl im Part?
+            short linkMode = 0;
+            partMatManager.ApplyMaterialOnPart(stg_catiaPart.Part, myStahl, linkMode);
+
+            // brauchen Sie Stahl im Body?
+            linkMode = 1;
+            partMatManager.ApplyMaterialOnBody(stg_catiaPart.Part.MainBody, myStahl, linkMode);
+
+            oMaterial_document.Close();
+        }
+        #endregion
+
+
 
     }
 
