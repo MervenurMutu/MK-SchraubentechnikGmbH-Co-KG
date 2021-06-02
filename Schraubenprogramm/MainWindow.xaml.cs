@@ -1347,14 +1347,108 @@ namespace Schraubenprogramm
         //CATIA ANPASSUNG
         #region CATIA Anpassung
 
-        
+
+        //CATIA Anbindung für Normgerechtes Partdesign       
+        #region Catia Anbindung für Normgewinde
+        private void Button_Berechnung_CATIA_Part_Click(object sender, RoutedEventArgs e)               //(NG: Normgerecht)
+        {
+
+            CatiaControl cc = new CatiaControl();
+
+            string thatkopfart = "";
+            if (tvi_BeSechkant.IsSelected == true)
+            {
+                thatkopfart = "Sechskant";
+            }
+            else if (tvi_BeVierkant.IsSelected == true)
+            {
+                thatkopfart = "Vierkant";
+            }
+
+            //Eigenschaften für Kopf und Schaft aus den Textboxen auslesen
+            #region Schraubeneigenschaften definieren
+            Schraube thatSchraubeneigenschaften = new Schraube(0, 0, "", "", 0, 0, 0);
+            thatSchraubeneigenschaften.gewindeLaenge = Convert.ToDouble(tb_Gewindelänge.Text);
+            thatSchraubeneigenschaften.laenge = Convert.ToDouble(tb_Gewindelänge.Text) + Convert.ToDouble(tb_Schaftlänge.Text);
+            thatSchraubeneigenschaften.innenradius = Convert.ToDouble(tb_Gewindedurchmesser.Text) / 2;
+
+            Schraubenkopf thatKopfeigenschaften = new Schraubenkopf(0, 0, "");
+            thatKopfeigenschaften.breite = Convert.ToDouble(tb_Kopfbreite.Text);
+            thatKopfeigenschaften.höhe = Convert.ToDouble(tb_Kopfhöhe.Text);
+
+            string thatMaterialangabe = cb_Be_werkstoffauswahl.Text;
+            #endregion
+
+            //Prüfen, ob der Kopf größer ist als der Schaft
+            #region Prüfung
+            if (thatKopfeigenschaften.breite <= (thatSchraubeneigenschaften.innenradius) * 2)                  //Wenn der Kopf kleiner ist als der Durchmesser Warnung ausgeben
+            {
+                MessageBoxResult result = MessageBox.Show("Schraubenschaft ist größer als Schraubenkopf. Fortfahren ?", "Warnung", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    //Catia Check
+                    if (cc.CatiaLäuft())
+                    {
+                        //Part suchen und öffnen
+                        cc.ErzeugePart();
+
+                        //SCHAFT erzeugen
+                        //Skizze für den Schaft
+                        cc.NG_ErzeugeSchaftSkizze();
+
+                        //Material auswählen
+                        cc.ErzeugeMaterial(thatMaterialangabe);
+
+                        //SchaftProfil und Block erzeugen 
+                        cc.NG_ErzeugeSchaftBlock(thatSchraubeneigenschaften);
+
+                        //KOPF erzeugen
+                        //Skizze, Profil und Block erzeugen
+                        cc.NG_ErzeugeKopfSkizze(thatKopfeigenschaften, thatkopfart);
+
+                    }
+                }
+                else if (result == MessageBoxResult.No)
+                {
+
+                }
+            }
+            #endregion
+
+            //Bei keinen Problemen normaler Programmdurchlauf
+            #region Catia Part erzeugen
+            else
+            {
+                //Catia Check
+                if (cc.CatiaLäuft())
+                {
+                    //Part suchen und öffnen
+                    cc.ErzeugePart();
+
+                    //SCHAFT erzeugen
+                    //Skizze für den Schaft
+                    cc.NG_ErzeugeSchaftSkizze();
+
+                    //SchaftProfil und Block erzeugen 
+                    cc.NG_ErzeugeSchaftBlock(thatSchraubeneigenschaften);
+
+                    //KOPF erzeugen
+                    //Skizze, Profil und Block erzeugen
+                    cc.NG_ErzeugeKopfSkizze(thatKopfeigenschaften, thatkopfart);
 
 
-        
+                }
+            }
+            #endregion
+        }
+        #endregion
+
+
 
         #endregion
     }
-    
+
 
 
 
