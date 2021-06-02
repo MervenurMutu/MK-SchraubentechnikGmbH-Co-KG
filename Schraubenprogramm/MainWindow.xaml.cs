@@ -1642,12 +1642,12 @@ namespace Schraubenprogramm
                 Schraubenkopf testingKopf = new Schraubenkopf(0, 0, "");
                 testingKopf.breite = Convert.ToDouble(tb_AnKopfbreite.Text);
                 testingSchaft.steigung = Convert.ToDouble(tb_An_Gewindesteigung.Text);
+
+                string itsMaterialmitgabe = cb_An_wertstoffauswahl.Text;
                 if (1 >= testingSchaft.steigung || testingSchaft.steigung >= 4)
                 {
                     MessageBox.Show("Bitte Steigung zwischen 1 und 4 wählen. Neuerungen sind im nächsten Update zu erwarten");
                 }
-
-
 
                 else if (testingKopf.breite <= testingSchaft.innenradius)
                 {
@@ -1674,6 +1674,8 @@ namespace Schraubenprogramm
                             cc.ErzeugeSchaftSkizze();
 
                             pb_1.Value = 3;
+
+                            cc.ErzeugeMaterial(itsMaterialmitgabe);
 
                             //Schaft Profil und Block erzeugen
                             Schraube itsSchraubeneigenschaften = new Schraube(0, 0, "", "", 0, 0, 0);      //neue Schraube erstellen und Eigenschaften aus den Textfeldern zuweisen
@@ -1784,6 +1786,7 @@ namespace Schraubenprogramm
                     //Catia Check
                     if (cc.CatiaLäuft())
                     {
+                        
                         pb_1.Value = 1;
                         //Part suchen und öffnen
                         #region Part erstellen
@@ -1795,6 +1798,8 @@ namespace Schraubenprogramm
                         #region Schaft erzeugen
                         //Skizze für Schaft erzeugen
                         cc.ErzeugeSchaftSkizze();
+
+                        cc.ErzeugeMaterial(itsMaterialmitgabe);
 
                         //Schaft Profil und Block erzeugen
                         Schraube itsSchraubeneigenschaften = new Schraube(0, 0, "", "", 0, 0, 0);      //neue Schraube erstellen und Eigenschaften aus den Textfeldern zuweisen
