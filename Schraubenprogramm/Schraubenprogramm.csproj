@@ -36,11 +36,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.HybridShapeTypeLib">
-      <HintPath>C:\Users\jokro\Desktop\Jade HS\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.HybridShapeTypeLib.dll</HintPath>
+      <HintPath>..\..\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.KnowledgewareTypeLib">
-      <HintPath>C:\Users\jokro\Desktop\Jade HS\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\MinimalCatia-94addece2521b9a7abe707821b0885561e366407\Verweise\Interop.KnowledgewareTypeLib.dll</HintPath>
+      <HintPath>..\..\Neuer Ordner\Interop.KnowledgewareTypeLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.ProductStructureTypeLib">
+      <HintPath>..\..\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
