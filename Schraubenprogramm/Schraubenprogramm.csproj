@@ -36,7 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.HybridShapeTypeLib">
-<<<<<<< HEAD
       <HintPath>..\..\..\..\Downloads\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -46,17 +45,6 @@
     </Reference>
     <Reference Include="Interop.ProductStructureTypeLib">
       <HintPath>..\..\..\..\Downloads\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
-=======
-      <HintPath>C:\Users\mingd\Desktop\Neuer Ordner\Interop.HybridShapeTypeLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.KnowledgewareTypeLib">
-      <HintPath>C:\Users\mingd\Desktop\Neuer Ordner\Interop.KnowledgewareTypeLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.ProductStructureTypeLib">
-      <HintPath>C:\Users\mingd\Desktop\Neuer Ordner\Interop.ProductStructureTypeLib.dll</HintPath>
->>>>>>> 5e727f3775d17cb34eb2865782ae2e14ae725592
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
