@@ -951,8 +951,8 @@ namespace Schraubenprogramm
 
             stg_catiaPart.Part.Update();
 
-            Reference RefMantelFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;2)));None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
-            Reference RefFrontFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;2);None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
+            Reference RefMantelFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;1)));None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
+            Reference RefFrontFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;1);None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
 
             //Gewinde erzeugen
             PARTITF.Thread Gewinde1 = SF2D.AddNewThreadWithOutRef();
