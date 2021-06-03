@@ -36,10 +36,13 @@ namespace Schraubenprogramm
         PartDocument partDocument;
         Part part1;
         Part part2;
+        Part part3;
         MECMOD.Sketch stg_cat_Profil1;
         MECMOD.Sketch stg_cat_Profil2;
         MECMOD.Sketch stg_cat_ProfilMutterBohrung;
         MECMOD.Sketch stg_cat_KopfProfilx;
+        MECMOD.Sketch stg_cat_UnterlegProfil;
+        MECMOD.Sketch stg_cat_UnterlegBohrung;
         Factory2D catFactory2D;
         Factory2D catFac;
 
@@ -108,6 +111,16 @@ namespace Schraubenprogramm
                 0.0, 0.0, 1.0
             };
             stg_cat_KopfProfilx.SetAbsoluteAxisData(array);
+        }
+        private void ErzeugeAchsensystemZ()
+        {
+            object[] array = new object[]
+            {
+                0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+            stg_cat_UnterlegBohrung.SetAbsoluteAxisData(array);
         }
         #endregion
 
@@ -934,20 +947,11 @@ namespace Schraubenprogramm
 
             stg_catiaPart.Part.Update();
 
-            Reference referenz1 = catPart.CreateReferenceFromName("");
-
-
-            CatChamferOrientation chamOrient = CatChamferOrientation.catNoReverseChamfer;
-            CatChamferPropagation chamProp = CatChamferPropagation.catTangencyChamfer;
-            CatChamferMode chamMode = CatChamferMode.catLengthAngleChamfer;
-            Chamfer Fase1 = SF2D.AddNewChamfer(referenz1, chamProp, chamMode, chamOrient, 1, 45);
-
-            Reference referenz2 = catPart.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;1)));None:();Cf11:());Face:(Brp:(Pad.1;2);None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", stg_NG_CatiaSchaftProfil);
-            Fase1.AddElementToChamfer(referenz2);
+            
 
             stg_catiaPart.Part.Update();
 
-            Reference RefMantelFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;1)));None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
+            Reference RefMantelFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;2)));None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
             Reference RefFrontFlaeche = stg_catiaPart.Part.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;2);None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", NG_SchaftBlock);
 
             //Gewinde erzeugen
@@ -1045,52 +1049,44 @@ namespace Schraubenprogramm
             #region Secchsantkopf
             else if (kopfart == "Sechskant")
             {
-                double HalbeLänge = (NG_kopfeigenschaften.breite) / 2;
-                double HalbeBreite = HalbeLänge * 0.4;
-
+                double SW = (NG_kopfeigenschaften.breite);
 
                 F2D = stg_NG_catiaKopfProfil.OpenEdition();
 
-                Point2D Point2D_1 = F2D.CreatePoint(HalbeBreite, HalbeLänge);                              //Sechseck erzeugen 
-                Point2D Point2D_2 = F2D.CreatePoint(-HalbeBreite, HalbeLänge);
-                Point2D Point2D_3 = F2D.CreatePoint(-HalbeLänge, HalbeBreite);
-                Point2D Point2D_4 = F2D.CreatePoint(-HalbeLänge, -HalbeBreite);
-                Point2D Point2D_5 = F2D.CreatePoint(-HalbeBreite, -HalbeLänge);
-                Point2D Point2D_6 = F2D.CreatePoint(HalbeBreite, -HalbeLänge);
-                Point2D Point2D_7 = F2D.CreatePoint(HalbeLänge, -HalbeBreite);
-                Point2D Point2D_8 = F2D.CreatePoint(HalbeLänge, HalbeBreite);
+                double SWWurzel3 = SW / Math.Sqrt(3);
+                double SWWurzel2 = SW / Math.Sqrt(2);
 
-                Line2D Line2D_1 = F2D.CreateLine(HalbeBreite, HalbeLänge, -HalbeBreite, HalbeLänge);
+                Point2D Point2D_1 = F2D.CreatePoint((SWWurzel2 / 2), (-SW / 2));                              //Sechseck erzeugen 
+                Point2D Point2D_2 = F2D.CreatePoint(SWWurzel3, 0);
+                Point2D Point2D_3 = F2D.CreatePoint((SWWurzel2 / 2), (SW / 2));
+                Point2D Point2D_4 = F2D.CreatePoint((-SWWurzel2 / 2), (SW / 2));
+                Point2D Point2D_5 = F2D.CreatePoint(-SWWurzel3, 0);
+                Point2D Point2D_6 = F2D.CreatePoint((-SWWurzel2 / 2), (-SW / 2));
+
+
+                Line2D Line2D_1 = F2D.CreateLine((SWWurzel2 / 2), (-SW / 2), SWWurzel3, 0);
                 Line2D_1.StartPoint = Point2D_1;
                 Line2D_1.EndPoint = Point2D_2;
 
-                Line2D Line2D_2 = F2D.CreateLine(-HalbeBreite, HalbeLänge, -HalbeLänge, HalbeBreite);
+                Line2D Line2D_2 = F2D.CreateLine(SWWurzel3, 0, (SWWurzel2 / 2), (SW / 2));
                 Line2D_2.StartPoint = Point2D_2;
                 Line2D_2.EndPoint = Point2D_3;
 
-                Line2D Line2D_3 = F2D.CreateLine(-HalbeLänge, HalbeBreite, -HalbeLänge, -HalbeBreite);
+                Line2D Line2D_3 = F2D.CreateLine((SWWurzel2 / 2), (SW / 2), (-SWWurzel2 / 2), (SW / 2));
                 Line2D_3.StartPoint = Point2D_3;
                 Line2D_3.EndPoint = Point2D_4;
 
-                Line2D Line2D_4 = F2D.CreateLine(-HalbeLänge, -HalbeBreite, -HalbeBreite, -HalbeLänge);
+                Line2D Line2D_4 = F2D.CreateLine((-SWWurzel2 / 2), (SW / 2), -SWWurzel3, 0);
                 Line2D_4.StartPoint = Point2D_4;
                 Line2D_4.EndPoint = Point2D_5;
 
-                Line2D Line2D_5 = F2D.CreateLine(-HalbeBreite, -HalbeLänge, HalbeBreite, -HalbeLänge);
+                Line2D Line2D_5 = F2D.CreateLine(-SWWurzel3, 0, (-SWWurzel2 / 2), (-SW / 2));
                 Line2D_5.StartPoint = Point2D_5;
                 Line2D_5.EndPoint = Point2D_6;
 
-                Line2D Line2D_6 = F2D.CreateLine(HalbeBreite, -HalbeLänge, HalbeLänge, -HalbeBreite);
+                Line2D Line2D_6 = F2D.CreateLine((-SWWurzel2 / 2), (-SW / 2), (SWWurzel2 / 2), (-SW / 2));
                 Line2D_6.StartPoint = Point2D_6;
-                Line2D_6.EndPoint = Point2D_7;
-
-                Line2D Line2D_7 = F2D.CreateLine(HalbeLänge, -HalbeBreite, HalbeLänge, HalbeBreite);
-                Line2D_7.StartPoint = Point2D_7;
-                Line2D_7.EndPoint = Point2D_8;
-
-                Line2D Line2D_8 = F2D.CreateLine(HalbeLänge, HalbeBreite, HalbeBreite, HalbeLänge);
-                Line2D_8.StartPoint = Point2D_8;
-                Line2D_8.EndPoint = Point2D_1;
+                Line2D_6.EndPoint = Point2D_1;
 
                 stg_NG_catiaKopfProfil.CloseEdition();                                                //Main Body in Bearbeitung definieren 
                 stg_catiaPart.Part.InWorkObject = stg_catiaPart.Part.MainBody;
@@ -1314,9 +1310,27 @@ namespace Schraubenprogramm
             part2 = partDokument.Part;
             #endregion
 
+            //Part 3 Unterlegscheibe
+            #region Part 3
+            //Product 3
+            ProductStructureTypeLib.Product product4 = productDocuments1.Product;
+            product4.set_PartNumber("Product");
+            product4.set_Name("The_Root_Product");
+
+            ProductStructureTypeLib.Products products4 = product4.Products;
+
+            //Part 3
+            Product product6 = products4.AddNewComponent("Part", "");
+            product6.set_PartNumber("Product.3");
+
+            PartDocument partDokument2 = (PartDocument)catDocuments1.Item("Product.3.CATPart");
+
+            part3 = partDokument2.Part;
+            #endregion
+
             //Skizze Part 1: Schraube erzeugen
             #region Part 1 
-            
+
             HybridBodies HybridBodyKopf1 = part1.HybridBodies;
             HybridBody catHybridBody1;
 
@@ -1392,6 +1406,7 @@ namespace Schraubenprogramm
 
             //Kopf für die Schraube definieren
             ErzeugeKopf(entfernung, schlüsselweite, kopfhöhe);
+
         }
 
         #region Kopf erzeugen
@@ -1619,7 +1634,113 @@ namespace Schraubenprogramm
 
             part2.Update();
         }
+
         #endregion
+
+        //Unterlegscheibe erzeugen
+        #region Unterlegscheibe erzeugen
+        //Normteil Mutter
+        internal void ErzeugeProductTeil3(double gewindedurchmesser, double höhe)
+        {
+            HybridBodies HybridBodyKopf3 = part3.HybridBodies;
+            HybridBody catHybridBody3;
+            double Höhe = höhe;
+
+            try
+            {
+                catHybridBody3 = HybridBodyKopf3.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+            // neue Skizze im ausgewaehlten geometrischen Set anlegen
+            Sketches catSketches3 = catHybridBody3.HybridSketches;
+            OriginElements catOriginElements4 = part3.OriginElements;
+            Reference catReference1 = (Reference)catOriginElements4.PlaneYZ;
+            stg_cat_UnterlegProfil = catSketches3.Add(catReference1);
+
+            // Achsensystem in Skizze erstellen 
+            ErzeugeAchsensystemX();
+
+            // Part aktualisieren
+            part3.Update();
+
+            //Schaft erzeugen
+            Factory2D catFac3 = stg_cat_UnterlegProfil.OpenEdition();
+
+            Circle2D circle = catFac3.CreateCircle(0, 0, gewindedurchmesser * 2, 0, 0);
+
+            // Skizzierer verlassen
+
+            stg_cat_UnterlegProfil.CloseEdition();
+
+            // Part aktualisieren
+
+            part3.Update();
+
+            // Hauptkoerper in Bearbeitung definieren
+            part3.InWorkObject = part3.MainBody;
+
+            //erzeugen
+            ShapeFactory catShapeFactory3 = (ShapeFactory)part3.ShapeFactory;
+            Pad catPad3 = catShapeFactory3.AddNewPad(stg_cat_UnterlegProfil, 1);
+            catPad3.DirectionOrientation = CatPrismOrientation.catRegularOrientation;
+            // Block umbenennen
+            catPad3.set_Name("Unterlegscheibe");
+
+            ErzeugeUnterlegBohrung(gewindedurchmesser, Höhe);
+
+            part1.Update();
+            part2.Update();
+            part3.Update();
+        }
+
+        #region Unterlegscheibe Bohrung
+        private void ErzeugeUnterlegBohrung(double gewindedurchmesser, double Höhe)
+        {
+            HybridBodies HybridBodyKopf5 = part3.HybridBodies;
+            HybridBody catHybridBody5;
+
+            try
+            {
+                catHybridBody5 = HybridBodyKopf5.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+            // neue Skizze im ausgewaehlten geometrischen Set anlegen
+            Sketches catSketches5 = catHybridBody5.HybridSketches;
+            OriginElements catOriginElements5 = part3.OriginElements;
+            Reference catReference5 = (Reference)catOriginElements5.PlaneYZ;
+            stg_cat_UnterlegBohrung = catSketches5.Add(catReference5);
+
+            // Achsensystem in Skizze erstellen 
+            ErzeugeAchsensystemZ();
+
+            Factory2D catFaca2 = stg_cat_UnterlegBohrung.OpenEdition();
+
+            Circle2D KopfSkizze = catFaca2.CreateCircle(0, 0, gewindedurchmesser / 2, 0, 0);
+
+            stg_cat_UnterlegBohrung.CloseEdition();
+            part3.InWorkObject = part3.MainBody;
+
+            ShapeFactory catShape3 = (ShapeFactory)part3.ShapeFactory;
+
+            Pocket catUnterlegBohrung = catShape3.AddNewPocket(stg_cat_UnterlegBohrung, 1);
+            catUnterlegBohrung.DirectionOrientation = CatPrismOrientation.catRegularOrientation;
+            catUnterlegBohrung.set_Name("Unterlegscheibe Bohrung");
+
+            part3.Update();
+        }
+        #endregion
+
+        #endregion
+
+
 
         #endregion
 
