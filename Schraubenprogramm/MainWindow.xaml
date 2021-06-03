@@ -23,6 +23,8 @@
             <RowDefinition Height="330*"></RowDefinition>
         </Grid.RowDefinitions>
 
+        <Button Click="Button_Click_1"></Button>
+        
         <!-- Header-->
         <Image x:Name="im_Begrüßung" Source="Begrüßung.png" Margin="107,20,-24,20" Grid.ColumnSpan="3" Grid.RowSpan="2" Visibility="Visible" />
 
