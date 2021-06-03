@@ -1365,7 +1365,24 @@ namespace Schraubenprogramm
             Pad catPad1 = catShapeFactory1.AddNewPad(stg_cat_Profil1, gewindelänge);
 
             // Block umbenennen
-            catPad1.set_Name("");
+            catPad1.set_Name("Schaft");
+
+            Reference RefMantelFlaeche = part1.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;0:(Brp:(Sketch.1;1)));None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", catPad1);
+            Reference RefFrontFlaeche = part1.CreateReferenceFromBRepName("RSur:(Face:(Brp:(Pad.1;2);None:();Cf11:());WithTemporaryBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", catPad1);
+
+            //Gewinde erzeugen
+            PARTITF.Thread Gewinde1 = catShapeFactory1.AddNewThreadWithOutRef();
+            Gewinde1.LateralFaceElement = RefMantelFlaeche;
+            Gewinde1.LimitFaceElement = RefFrontFlaeche;
+            Gewinde1.Diameter = gewindedurchmesser;
+            Gewinde1.Depth = gewindelänge;
+            Gewinde1.Side = CatThreadSide.catRightSide;
+
+            Gewinde1.CreateUserStandardDesignTable("Metric_Thick_Pitch", @"C:\Program Files\Dassault Systemes\B28\win_b64\resources\standard\thread\Metric_Thick_Pitch.xml");
+            Gewinde1.Diameter = gewindedurchmesser;
+            Gewinde1.Pitch = 1.250000;
+
+            part1.Update();
 
             // Part aktualisieren
             part1.Update();
@@ -1560,8 +1577,6 @@ namespace Schraubenprogramm
             ErzeugeMutterBohrung(mutterdurchmesser, mutterhöhe);
 
             part1.Update();
-
-            
         }
 
         #region Mutter Bohrung
