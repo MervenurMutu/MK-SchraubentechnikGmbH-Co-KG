@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using ProductStructureTypeLib;
 
 namespace Schraubenprogramm
 {
@@ -31,7 +32,7 @@ namespace Schraubenprogramm
         {
             InitializeComponent();
 
-            
+
         }
 
         //TreeViewItems für Hauptauswahl
@@ -281,7 +282,7 @@ namespace Schraubenprogramm
                         dichte = 8;
                         Preis = 10.28;
                     }
-                    
+
                     if (tvi_BeVierkant.IsSelected)
                     {
                         gesamtvolumen = ((((Gewindedurchmesser / 2) * (Gewindedurchmesser / 2) * Math.PI) * (Gewindelänge + Schaftlänge)) + (Kopfhöhe * Kopfbreite)) / 1000;
@@ -385,7 +386,7 @@ namespace Schraubenprogramm
             {
                 MessageBox.Show("Bitte Ealle Felder ausfüllen");
             }
-            
+
 
             else
             {
@@ -482,7 +483,7 @@ namespace Schraubenprogramm
                         dichte = 8;
                         Preis = 10.28;
                     }
-                   
+
                     if (tvi_AnVierkant.IsSelected)
                     {
                         gesamtvolumen = (((((Gewindedurchmesser / 2) * (Gewindedurchmesser / 2) * Math.PI) * (Gewindelänge + Schaftlänge))) + (Kopfhöhe * Kopfbreite));
@@ -595,7 +596,7 @@ namespace Schraubenprogramm
             {
                 MessageBox.Show("Alle Felder müssen ausgefüllt sein");
             }
-            
+
             else
             {
                 double test = Convert.ToDouble(tb_An_Gewindesteigung.Text);
@@ -623,7 +624,7 @@ namespace Schraubenprogramm
                     {
                         MessageBox.Show("Negative Zahlen sind leider nicht möglich");
                     }
-                    else if(Zylinderdurchmesser <= Innenschlüsselweite + (Innenschlüsselweite/3))
+                    else if (Zylinderdurchmesser <= Innenschlüsselweite + (Innenschlüsselweite / 3))
                     {
                         MessageBox.Show("Bitte größeren Zylinderkopf wählen");
                     }
@@ -1624,7 +1625,7 @@ namespace Schraubenprogramm
                         MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
                         pb_1.Value = 0;
 
-                        cc.Screenshot("Schraube");
+
                     }
                     else
                     {
@@ -1770,7 +1771,7 @@ namespace Schraubenprogramm
                             MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
                             pb_1.Value = 0;
 
-                            cc.Screenshot("Schraube");
+
                         }
                         else
                         {
@@ -1790,7 +1791,7 @@ namespace Schraubenprogramm
                     //Catia Check
                     if (cc.CatiaLäuft())
                     {
-                        
+
                         pb_1.Value = 1;
                         //Part suchen und öffnen
                         #region Part erstellen
@@ -1896,7 +1897,7 @@ namespace Schraubenprogramm
 
                         MessageBox.Show("Ihr Modell wurde in CATIA erzeugt.");
                         pb_1.Value = 0;
-                        cc.Screenshot("Schraube");
+
                     }
                     else
                     {
@@ -2013,22 +2014,84 @@ namespace Schraubenprogramm
         #region Normteile
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            CatiaControl cc = new CatiaControl();
+            int zahler = 0;
+
+            if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 4)
+            {
+                zahler = 0;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 6)
+            {
+                zahler = 1;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 8)
+            {
+                zahler = 2;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 10)
+            {
+                zahler = 3;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 12)
+            {
+                zahler = 4;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 14)
+            {
+                zahler = 5;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 16)
+            {
+                zahler = 6;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 20)
+            {
+                zahler = 7;
+            }
+            else if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 24)
+            {
+                zahler = 8;
+            }
 
 
+            if (lb_Item_Sechkant.IsSelected == true)
+            {
+                double[,] Normtabelle = new double[11, 5];
 
 
+                //Bezeichnung           // Kopfgröße             //Kerndurchmesser      //Schlüsselweite          //Kopfhöhe
+                Normtabelle[0, 0] = 4; Normtabelle[0, 1] = 7.7; Normtabelle[0, 2] = 3.40; Normtabelle[0, 3] = 7; Normtabelle[0, 4] = 2.8;
+                Normtabelle[1, 0] = 6; Normtabelle[1, 1] = 11.1; Normtabelle[1, 2] = 5.07; Normtabelle[1, 3] = 10; Normtabelle[1, 4] = 4;
+                Normtabelle[2, 0] = 8; Normtabelle[2, 1] = 14.4; Normtabelle[2, 2] = 6.82; Normtabelle[2, 3] = 13; Normtabelle[2, 4] = 5.3;
+                Normtabelle[3, 0] = 10; Normtabelle[3, 1] = 18.9; Normtabelle[3, 2] = 8.56; Normtabelle[3, 3] = 17; Normtabelle[3, 4] = 6.4;
+                Normtabelle[4, 0] = 12; Normtabelle[4, 1] = 21.1; Normtabelle[4, 2] = 10.32; Normtabelle[4, 3] = 19; Normtabelle[4, 4] = 7.5;
+                Normtabelle[5, 0] = 14; Normtabelle[5, 1] = 24.5; Normtabelle[5, 2] = 12.07; Normtabelle[5, 3] = 21; Normtabelle[5, 4] = 8.8;
+                Normtabelle[6, 0] = 16; Normtabelle[6, 1] = 26.8; Normtabelle[6, 2] = 14.08; Normtabelle[6, 3] = 24; Normtabelle[6, 4] = 10;
+
+                Normtabelle[7, 0] = 20; Normtabelle[7, 1] = 33.5; Normtabelle[7, 2] = 17.57; Normtabelle[7, 3] = 30; Normtabelle[7, 4] = 12.5;
+
+                Normtabelle[8, 0] = 24; Normtabelle[8, 1] = 40.0; Normtabelle[8, 2] = 21.07; Normtabelle[8, 3] = 36; Normtabelle[8, 4] = 15;
+
+                double gewindelänge = Convert.ToDouble(tb_NT_Länge.Text);
+                double kopfgöße = Normtabelle[zahler, 1];
+                double gewindedurchmesser = Normtabelle[zahler, 2];
+                double schlüsselweite = Normtabelle[zahler, 3];
+                double kopfhöhe = Normtabelle[zahler, 4];
+
+                CatiaControl cc = new CatiaControl();
+
+                //Läuft Catia ? 
+                cc.CatiaLäuft();
+
+                cc.ErzeugeProduct(gewindedurchmesser, gewindelänge, schlüsselweite, kopfhöhe);
+
+                cc.ErzeugeProductTeil2(schlüsselweite, kopfhöhe, gewindedurchmesser);
 
 
+            }
+            #endregion
 
-            //Läuft Catia ? 
-            cc.CatiaLäuft();
-
-            //Part erzeugen 
-            cc.ErzeugePart();
-
-            //Skizze für den Schaft erzeugen
-            cc.NG_ErzeugeSchaftSkizze();
+            #endregion
 
 
         }
@@ -2037,12 +2100,6 @@ namespace Schraubenprogramm
 
 
 
-        #endregion
-
-        #endregion
-
-     
-    }
 
 
 
@@ -2093,154 +2150,150 @@ namespace Schraubenprogramm
 
 
 
-
-
-
-
-
-    //Klassen, die nicht extra ausgelagert werden sollten 
-    #region Klassen
-    public class Schrauben
-    {
-
-        public string Name { get; set; }
-        public int Artikelnummer { get; set; }
-        public int Anzahl { get; set; }
-        public double Durchmesser { get; set; }
-        public double Preis { get; set; }
-
-        public Schrauben(string name, double eigenschaft, int anzahl, int artikelnummer, double preis)
+        //Klassen, die nicht extra ausgelagert werden sollten 
+        #region Klassen
+        public class Schrauben
         {
-            this.Name = name;
-            this.Artikelnummer = artikelnummer;
-            this.Anzahl = anzahl;
-            this.Durchmesser = eigenschaft;
-            this.Preis = preis;
+
+            public string Name { get; set; }
+            public int Artikelnummer { get; set; }
+            public int Anzahl { get; set; }
+            public double Durchmesser { get; set; }
+            public double Preis { get; set; }
+
+            public Schrauben(string name, double eigenschaft, int anzahl, int artikelnummer, double preis)
+            {
+                this.Name = name;
+                this.Artikelnummer = artikelnummer;
+                this.Anzahl = anzahl;
+                this.Durchmesser = eigenschaft;
+                this.Preis = preis;
+
+            }
+            override public string ToString()
+            {
+                return (Name + Artikelnummer + Anzahl + Durchmesser + Preis);
+            }
 
         }
-        override public string ToString()
+
+        public class Normteil
         {
-            return (Name + Artikelnummer + Anzahl + Durchmesser + Preis);
+            public string Name { get; set; }
+            public int Artikelnummer { get; set; }
+            public int Anzahl { get; set; }
+            public double Durchmesser { get; set; }
+
+            public Normteil(string name, double eigenschaft, int anzahl, int artikelnummer)
+            {
+                this.Name = name;
+                this.Artikelnummer = artikelnummer;
+                this.Anzahl = anzahl;
+                this.Durchmesser = eigenschaft;
+            }
+
         }
 
-    }
 
-    public class Normteil
-    {
-        public string Name { get; set; }
-        public int Artikelnummer { get; set; }
-        public int Anzahl { get; set; }
-        public double Durchmesser { get; set; }
-
-        public Normteil(string name, double eigenschaft, int anzahl, int artikelnummer)
+        public class Store
         {
-            this.Name = name;
-            this.Artikelnummer = artikelnummer;
-            this.Anzahl = anzahl;
-            this.Durchmesser = eigenschaft;
+            public List<Schrauben> Schraubenliste { get; set; }
+            public List<Schrauben> Shoppinglist { get; set; }
+
+
+            public Store()
+            {
+                Schraubenliste = new List<Schrauben>();
+                Shoppinglist = new List<Schrauben>();
+            }
+
         }
 
-    }
-
-
-    public class Store
-    {
-        public List<Schrauben> Schraubenliste { get; set; }
-        public List<Schrauben> Shoppinglist { get; set; }
-
-
-        public Store()
+        public class Store2
         {
-            Schraubenliste = new List<Schrauben>();
-            Shoppinglist = new List<Schrauben>();
+            public List<Schrauben> Schraubenliste2 { get; set; }
+            public List<Schrauben> Shoppinglist2 { get; set; }
+
+
+            public Store2()
+            {
+                Schraubenliste2 = new List<Schrauben>();
+                Shoppinglist2 = new List<Schrauben>();
+            }
+
         }
 
-    }
-
-    public class Store2
-    {
-        public List<Schrauben> Schraubenliste2 { get; set; }
-        public List<Schrauben> Shoppinglist2 { get; set; }
 
 
-        public Store2()
+        public class Angaben2
         {
-            Schraubenliste2 = new List<Schrauben>();
-            Shoppinglist2 = new List<Schrauben>();
+            public string Eigenschaft { get; set; }
+            public string Auswahl { get; set; }
+            public Angaben2(string eigenschaft, string wert)
+            {
+                this.Eigenschaft = eigenschaft;
+                this.Auswahl = wert;
+            }
+        }
+        public class Angaben
+        {
+            public string Eigenschaft { get; set; }
+            public double Wert { get; set; }
+            public Angaben(string eigenschaft, double wert)
+            {
+                this.Eigenschaft = eigenschaft;
+                this.Wert = wert;
+            }
         }
 
-    }
-
-
-
-    public class Angaben2
-    {
-        public string Eigenschaft { get; set; }
-        public string Auswahl { get; set; }
-        public Angaben2(string eigenschaft, string wert)
+        public class übersicht
         {
-            this.Eigenschaft = eigenschaft;
-            this.Auswahl = wert;
+            public string Eigenschaft { get; set; }
+            public double Wert { get; set; }
+            public übersicht(string eigenschaft, double wert)
+            {
+                this.Eigenschaft = eigenschaft;
+                this.Wert = wert;
+            }
         }
-    }
-    public class Angaben
-    {
-        public string Eigenschaft { get; set; }
-        public double Wert { get; set; }
-        public Angaben(string eigenschaft, double wert)
+
+        public class übersichtNT
         {
-            this.Eigenschaft = eigenschaft;
-            this.Wert = wert;
+            public string Eigenschaft { get; set; }
+            public double Wert { get; set; }
+            public übersichtNT(string eigenschaft, double wert)
+            {
+                this.Eigenschaft = eigenschaft;
+                this.Wert = wert;
+            }
         }
-    }
 
-    public class übersicht
-    {
-        public string Eigenschaft { get; set; }
-        public double Wert { get; set; }
-        public übersicht(string eigenschaft, double wert)
+        public class technischesBlatt
         {
-            this.Eigenschaft = eigenschaft;
-            this.Wert = wert;
+            public string Eigenschaft { get; set; }
+            public double Wert { get; set; }
+            public technischesBlatt(string eigenschaft, double wert)
+            {
+                this.Eigenschaft = eigenschaft;
+                this.Wert = wert;
+            }
         }
-    }
 
-    public class übersichtNT
-    {
-        public string Eigenschaft { get; set; }
-        public double Wert { get; set; }
-        public übersichtNT(string eigenschaft, double wert)
+
+        class Warenartikel
         {
-            this.Eigenschaft = eigenschaft;
-            this.Wert = wert;
-        }
-    }
+            public string ware { get; set; }
+            public int anzahl { get; set; }
+            public int artikelnummer { get; set; }
+            public double einzelpreis { get; set; }
 
-    public class technischesBlatt
-    {
-        public string Eigenschaft { get; set; }
-        public double Wert { get; set; }
-        public technischesBlatt(string eigenschaft, double wert)
-        {
-            this.Eigenschaft = eigenschaft;
-            this.Wert = wert;
-        }
-    }
-
-
-    class Warenartikel
-    {
-        public string ware { get; set; }
-        public int anzahl { get; set; }
-        public int artikelnummer { get; set; }
-        public double einzelpreis { get; set; }
-
-        public Warenartikel(string Ware, int Anzahl, int Artikelnummer, double Einzelpreis)
-        {
-            this.ware = Ware;
-            this.anzahl = Anzahl;
-            this.artikelnummer = Artikelnummer;
-            this.einzelpreis = Einzelpreis;
+            public Warenartikel(string Ware, int Anzahl, int Artikelnummer, double Einzelpreis)
+            {
+                this.ware = Ware;
+                this.anzahl = Anzahl;
+                this.artikelnummer = Artikelnummer;
+                this.einzelpreis = Einzelpreis;
+            }
         }
     }
 }
