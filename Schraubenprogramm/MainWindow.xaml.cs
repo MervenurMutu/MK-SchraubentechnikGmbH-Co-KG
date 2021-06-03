@@ -2091,9 +2091,15 @@ namespace Schraubenprogramm
 
                     try
                     {
+                        //Schaft/Gewinde
                         cc.ErzeugeProduct(gewindedurchmesser, gewindelänge, schlüsselweite, kopfhöhe);
 
+                        // Mutter
                         cc.ErzeugeProductTeil2(schlüsselweite, kopfhöhe, gewindedurchmesser);
+
+                        double höhe = 0.5;
+                        //Unterlegscheibe
+                        cc.ErzeugeProductTeil3(gewindedurchmesser, höhe);
                     }
                     catch (Exception)
                     {
