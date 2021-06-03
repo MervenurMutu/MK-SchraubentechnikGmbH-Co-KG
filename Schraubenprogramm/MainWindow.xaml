@@ -22,9 +22,6 @@
             <RowDefinition Height="100*"></RowDefinition>
             <RowDefinition Height="330*"></RowDefinition>
         </Grid.RowDefinitions>
-
-        <Button Click="Button_Click_1"></Button>
-        
         <!-- Header-->
         <Image x:Name="im_Begrüßung" Source="Begrüßung.png" Margin="107,20,-24,20" Grid.ColumnSpan="3" Grid.RowSpan="2" Visibility="Visible" />
 
@@ -228,6 +225,7 @@
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
+                                <Button Grid.Row="4" Margin="17,5,167,15" Click="Button_Click_Normteil" >CATIA Part erstellen</Button>
                                 <Button x:Name="btn_NT_Zurück2" Grid.Row="4" Margin="177,5,10,15" Click="btn_NT_Zurück2_Click" >zurück</Button>
                                 <Button x:Name="btn_AktualisierenNT" Grid.Column="1" Margin="211,5,5,7" Click="btn_AktualisierenNT_Click"  >Aktualisieren</Button>
                                 <Label Margin="5,5,5,1">Ihre Auswahl</Label>
