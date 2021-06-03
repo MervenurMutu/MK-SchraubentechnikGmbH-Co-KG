@@ -5,6 +5,7 @@ using MECMOD;
 using PARTITF;
 using HybridShapeTypeLib;
 using CATMat;
+using ProductStructureTypeLib;
 
 namespace Schraubenprogramm
 
@@ -28,6 +29,20 @@ namespace Schraubenprogramm
         Sketches catSketches;
         OriginElements catOriginElements;
         HybridShapePlaneOffset hybridShapePlaneOffset1;
+
+
+        //Product einbindungen
+        ProductDocument productDocuments1;
+        PartDocument partDocument;
+        Part part1;
+        Part part2;
+        MECMOD.Sketch stg_cat_Profil1;
+        MECMOD.Sketch stg_cat_Profil2;
+        MECMOD.Sketch stg_cat_ProfilMutterBohrung;
+        MECMOD.Sketch stg_cat_KopfProfilx;
+        Factory2D catFactory2D;
+        Factory2D catFac;
+
 
         //Achsensysteme erzeugen
         #region Achsensysteme erzeugen 
@@ -63,6 +78,36 @@ namespace Schraubenprogramm
                 0.0, 0.0, 1.0
             };
             stg_NG_catiaKopfProfil.SetAbsoluteAxisData(array);
+        }
+        private void ErzeugeAchsensystemX()
+        {
+            object[] array = new object[]
+            {
+                0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+            stg_cat_Profil1.SetAbsoluteAxisData(array);
+        }
+        private void ErzeugeAchsensystemY()
+        {
+            object[] array = new object[]
+            {
+                0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+            stg_cat_Profil2.SetAbsoluteAxisData(array);
+        }
+        private void ErzeugeAchsensystemS()
+        {
+            object[] array = new object[]
+            {
+                0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+            stg_cat_KopfProfilx.SetAbsoluteAxisData(array);
         }
         #endregion
 
@@ -1188,7 +1233,6 @@ namespace Schraubenprogramm
         }
         #endregion
 
-
         //Screenshot erzeugen
         #region Screenshot
         public void ErzeugeScreenshot(Schraube Schraube)
@@ -1221,35 +1265,351 @@ namespace Schraubenprogramm
         stg_catiaApp.ActiveWindow.ActiveViewer.PutBackgroundColor(arr1);
 
         }
-    #endregion
 
-    public void Screenshot(string bildname)
+
+        #endregion
+
+        //Normteile erzeugen
+        #region Normteile 
+        internal void ErzeugeProduct(double gewindedurchmesser, double gewindelänge, double schlüsselweite, double kopfhöhe)
         {
+            INFITF.Documents catDocuments1 = stg_catiaApp.Documents;
+            productDocuments1 = catDocuments1.Add("Product") as ProductStructureTypeLib.ProductDocument;
 
-            object[] arr1 = new object[3];
-            stg_catiaApp.ActiveWindow.ActiveViewer.GetBackgroundColor(arr1);
-            Console.WriteLine("Col: " + arr1[0] + " " + arr1[1] + " " + arr1[2]);
+            double entfernung = gewindelänge;
 
-            object[] arr2 = new object[] { 1, 1, 1 };
-            stg_catiaApp.ActiveWindow.ActiveViewer.PutBackgroundColor(arr2);
+            //Part 1 aus Produkt erzeugen: Schraube
+            #region Part 1
+            //Product 1
+            ProductStructureTypeLib.Product product1 = productDocuments1.Product;
+            product1.set_PartNumber("Product");
+            product1.set_Name("The_Root_Product");
 
-            stg_catiaApp.StartCommand("CompassDisplayOff");
-            stg_catiaApp.ActiveWindow.ActiveViewer.Reframe();
+            ProductStructureTypeLib.Products products1 = product1.Products;
 
-            // hsp_catiaApp.ActiveWindow.ActiveViewer.Viewpoint3D = INFITF.Viewpoint3D;
-            //int[] color = new int[3]; // Hintergundfarbe in Weiß setzen
-            //color[0] = 1;
-            //color[1] = 1;
-            //color[2] = 1;
-            // CATSafeArray color[] = new CATSafeArrayVariant[3];
+            //Part 1
+            Product product2 = products1.AddNewComponent("Part", "");
+            product2.set_PartNumber("Product.1");
 
-            INFITF.SettingControllers settingControllers1 = stg_catiaApp.SettingControllers;
-            //INFITF.VisualizationSettingAtt visualizationSettingAtt1 = settingControllers1.Item("CATVizVisualizationSettingCtrl");
+            PartDocument partDokument1 = (PartDocument)catDocuments1.Item("Product.1.CATPart");
 
-            // hsp_catiaApp.ActiveWindow.ActiveViewer.PutBackgroundColor(color);
+            part1 = partDokument1.Part;
+            #endregion
 
-            stg_catiaApp.ActiveWindow.ActiveViewer.CaptureToFile(CatCaptureFormat.catCaptureFormatBMP, "C:\\Temp\\" + bildname + ".bmp");
+            //Part 2 aus Produkt erzeugen: Mutter
+            #region Part 2
+            //Product 2
+            ProductStructureTypeLib.Product product3 = productDocuments1.Product;
+            product3.set_PartNumber("Product");
+            product3.set_Name("The_Root_Product");
+
+            ProductStructureTypeLib.Products products3 = product3.Products;
+
+            //Part 2
+            Product product5 = products3.AddNewComponent("Part", "");
+            product5.set_PartNumber("Product.2");
+
+            PartDocument partDokument = (PartDocument)catDocuments1.Item("Product.2.CATPart");
+
+            part2 = partDokument.Part;
+            #endregion
+
+            //Skizze Part 1: Schraube erzeugen
+            #region Part 1 
+            
+            HybridBodies HybridBodyKopf1 = part1.HybridBodies;
+            HybridBody catHybridBody1;
+
+            try
+            {
+                catHybridBody1 = HybridBodyKopf1.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+            // neue Skizze im ausgewaehlten geometrischen Set anlegen
+            Sketches catSketches1 = catHybridBody1.HybridSketches;
+            OriginElements catOriginElements = part1.OriginElements;
+            Reference catReference1 = (Reference)catOriginElements.PlaneYZ;
+            stg_cat_Profil1 = catSketches1.Add(catReference1);
+
+            // Achsensystem in Skizze erstellen 
+            ErzeugeAchsensystemX();
+
+            // Part aktualisieren
+            part1.Update();
+
+            // Skizze umbenennen
+            stg_cat_Profil1.set_Name("Rechteck");
+
+            //Schaft erzeugen
+            catFactory2D = stg_cat_Profil1.OpenEdition();
+
+            Circle2D circle = catFactory2D.CreateCircle(0, 0, gewindedurchmesser/ 2, 0, 0);
+
+            // Skizzierer verlassen
+
+            stg_cat_Profil1.CloseEdition();
+
+            // Part aktualisieren
+
+            part1.Update();
+
+            // Hauptkoerper in Bearbeitung definieren
+            part1.InWorkObject = part1.MainBody;
+
+            //erzeugen
+            ShapeFactory catShapeFactory1 = (ShapeFactory)part1.ShapeFactory;
+            Pad catPad1 = catShapeFactory1.AddNewPad(stg_cat_Profil1, gewindelänge);
+
+            // Block umbenennen
+            catPad1.set_Name("");
+
+            // Part aktualisieren
+            part1.Update();
+
+            part2.Update();
+            #endregion
+
+            //Kopf für die Schraube definieren
+            ErzeugeKopf(entfernung, schlüsselweite, kopfhöhe);
         }
+
+        #region Kopf erzeugen
+        private void ErzeugeKopf(double entfernung, double schlüsselweite, double kopfhöhe)
+        {
+            HybridShapeFactory HSF = (HybridShapeFactory) part1.HybridShapeFactory;
+            HybridBodies HybridBodyKopf5 = part1.HybridBodies;
+            HybridBody catHybridBodyKopf5;
+
+            try
+            {
+                catHybridBodyKopf5 = HybridBodyKopf5.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+            catSketches = catHybridBodyKopf5.HybridSketches;
+            catOriginElements = part1.OriginElements;
+
+            hybridShapePlaneOffset1 = HSF.AddNewPlaneOffset((Reference)catOriginElements.PlaneYZ, entfernung, false);
+
+            OriginElements origin = part1.OriginElements;
+            Reference catref = (Reference)origin.PlaneYZ;
+            stg_cat_KopfProfilx = catSketches.Add(catref);
+            catHybridBodyKopf5.AppendHybridShape(hybridShapePlaneOffset1);
+
+            part1.InWorkObject = hybridShapePlaneOffset1;
+            hybridShapePlaneOffset1.set_Name("OffsetEbene");
+            part1.Update();
+
+            HybridShapes hybridShapes1 = catHybridBodyKopf5.HybridShapes;
+            Reference catReference1 = (Reference)hybridShapes1.Item("OffsetEbene");
+
+            stg_cat_KopfProfilx = catSketches.Add(catReference1);
+
+            ErzeugeAchsensystemS();
+
+            double SW = schlüsselweite;
+            double SWWurzel3 = SW / Math.Sqrt(3);
+            double SWWurzel2 = SW / Math.Sqrt(2);
+            double Kopfhöhe = kopfhöhe;
+            
+
+            F2D = stg_cat_KopfProfilx.OpenEdition();
+
+            Point2D Point2D_1 = F2D.CreatePoint((SWWurzel2 / 2), (-SW / 2));                              //Sechseck erzeugen 
+            Point2D Point2D_2 = F2D.CreatePoint(SWWurzel3, 0);
+            Point2D Point2D_3 = F2D.CreatePoint((SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_4 = F2D.CreatePoint((-SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_5 = F2D.CreatePoint(-SWWurzel3, 0);
+            Point2D Point2D_6 = F2D.CreatePoint((-SWWurzel2 / 2), (-SW / 2));
+
+
+            Line2D Line2D_1 = F2D.CreateLine((SWWurzel2 / 2), (-SW / 2), SWWurzel3, 0);
+            Line2D_1.StartPoint = Point2D_1;
+            Line2D_1.EndPoint = Point2D_2;
+
+            Line2D Line2D_2 = F2D.CreateLine(SWWurzel3, 0, (SWWurzel2 / 2), (SW / 2));
+            Line2D_2.StartPoint = Point2D_2;
+            Line2D_2.EndPoint = Point2D_3;
+
+            Line2D Line2D_3 = F2D.CreateLine((SWWurzel2 / 2), (SW / 2), (-SWWurzel2 / 2), (SW / 2));
+            Line2D_3.StartPoint = Point2D_3;
+            Line2D_3.EndPoint = Point2D_4;
+
+            Line2D Line2D_4 = F2D.CreateLine((-SWWurzel2 / 2), (SW / 2), -SWWurzel3, 0);
+            Line2D_4.StartPoint = Point2D_4;
+            Line2D_4.EndPoint = Point2D_5;
+
+            Line2D Line2D_5 = F2D.CreateLine(-SWWurzel3, 0, (-SWWurzel2 / 2), (-SW / 2));
+            Line2D_5.StartPoint = Point2D_5;
+            Line2D_5.EndPoint = Point2D_6;
+
+            Line2D Line2D_6 = F2D.CreateLine((-SWWurzel2 / 2), (-SW / 2), (SWWurzel2 / 2), (-SW / 2));
+            Line2D_6.StartPoint = Point2D_6;
+            Line2D_6.EndPoint = Point2D_1;
+
+
+            stg_cat_KopfProfilx.CloseEdition();                                                //Main Body in Bearbeitung definieren 
+            part1.InWorkObject = part1.MainBody;
+
+            ShapeFactory shapefac = (ShapeFactory) part1.ShapeFactory;
+            Pad catKopfBlockx = shapefac.AddNewPad(stg_cat_KopfProfilx, Kopfhöhe);                    //Sechskantkopf erzeugen 
+            catKopfBlockx.DirectionOrientation = CatPrismOrientation.catRegularOrientation;
+            catKopfBlockx.set_Name("Sechskant");
+
+            part1.Update();
+
+        }
+        #endregion
+
+        //Mutter als Part im Produkt erzeugen
+        #region Mutter erzeugen
+        internal void ErzeugeProductTeil2(double mutterbreite, double mutterhöhe, double mutterdurchmesser)
+        {
+            //Normteil Mutter
+            double breite = mutterbreite * (5 / 3);
+
+            HybridBodies HybridBodyKopf2 = part2.HybridBodies;
+            HybridBody catHybridBody2;
+
+            try
+            {
+                catHybridBody2 = HybridBodyKopf2.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+            // neue Skizze im ausgewaehlten geometrischen Set anlegen
+            Sketches catSketches2 = catHybridBody2.HybridSketches;
+            OriginElements catOriginElements2 = part2.OriginElements;
+            Reference catReference2 = (Reference)catOriginElements2.PlaneYZ;
+            stg_cat_Profil2 = catSketches2.Add(catReference2);
+
+            // Achsensystem in Skizze erstellen 
+            ErzeugeAchsensystemY();
+
+            // Part aktualisieren
+            part2.Update();
+
+            catFac = stg_cat_Profil2.OpenEdition();
+
+            //Mutter Skizze erzeugen
+
+            double SW = breite;
+            double SWWurzel3 = SW / Math.Sqrt(3);
+            double SWWurzel2 = SW / Math.Sqrt(2);
+            
+            
+
+            Point2D Point2D_1 = catFac.CreatePoint((SWWurzel2 / 2), (-SW / 2));                              //Sechseck erzeugen 
+            Point2D Point2D_2 = catFac.CreatePoint(SWWurzel3, 0);
+            Point2D Point2D_3 = catFac.CreatePoint((SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_4 = catFac.CreatePoint((-SWWurzel2 / 2), (SW / 2));
+            Point2D Point2D_5 = catFac.CreatePoint(-SWWurzel3, 0);
+            Point2D Point2D_6 = catFac.CreatePoint((-SWWurzel2 / 2), (-SW / 2));
+
+
+            Line2D Line2D_1 = catFac.CreateLine((SWWurzel2 / 2), (-SW / 2), SWWurzel3, 0);
+            Line2D_1.StartPoint = Point2D_1;
+            Line2D_1.EndPoint = Point2D_2;
+
+            Line2D Line2D_2 = catFac.CreateLine(SWWurzel3, 0, (SWWurzel2 / 2), (SW / 2));
+            Line2D_2.StartPoint = Point2D_2;
+            Line2D_2.EndPoint = Point2D_3;
+
+            Line2D Line2D_3 = catFac.CreateLine((SWWurzel2 / 2), (SW / 2), (-SWWurzel2 / 2), (SW / 2));
+            Line2D_3.StartPoint = Point2D_3;
+            Line2D_3.EndPoint = Point2D_4;
+
+            Line2D Line2D_4 = catFac.CreateLine((-SWWurzel2 / 2), (SW / 2), -SWWurzel3, 0);
+            Line2D_4.StartPoint = Point2D_4;
+            Line2D_4.EndPoint = Point2D_5;
+
+            Line2D Line2D_5 = catFac.CreateLine(-SWWurzel3, 0, (-SWWurzel2 / 2), (-SW / 2));
+            Line2D_5.StartPoint = Point2D_5;
+            Line2D_5.EndPoint = Point2D_6;
+
+            Line2D Line2D_6 = catFac.CreateLine((-SWWurzel2 / 2), (-SW / 2), (SWWurzel2 / 2), (-SW / 2));
+            Line2D_6.StartPoint = Point2D_6;
+            Line2D_6.EndPoint = Point2D_1;
+
+            stg_cat_Profil2.CloseEdition();
+
+            part2.Update();
+
+            part2.InWorkObject = part2.MainBody;
+
+            ShapeFactory catShapeFactory2 = (ShapeFactory)part2.ShapeFactory;
+            Pad catPad2 = catShapeFactory2.AddNewPad(stg_cat_Profil2, mutterhöhe);
+            catPad2.DirectionOrientation = CatPrismOrientation.catInverseOrientation;
+
+            // Block umbenennen
+            catPad2.set_Name("Mutter");
+
+            // Part aktualisieren
+            part2.Update();
+
+            ErzeugeMutterBohrung(mutterdurchmesser, mutterhöhe);
+
+            part1.Update();
+
+            
+        }
+
+        #region Mutter Bohrung
+        private void ErzeugeMutterBohrung(double mutterdurchmesser, double mutterhöhe)
+        {
+            HybridBodies HybridBodyKopf3 = part2.HybridBodies;
+            HybridBody catHybridBody3;
+
+            try
+            {
+                catHybridBody3 = HybridBodyKopf3.Item("Geometrisches Set.1");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fehler");
+                return;
+            }
+            // neue Skizze im ausgewaehlten geometrischen Set anlegen
+            Sketches catSketches3 = catHybridBody3.HybridSketches;
+            OriginElements catOriginElements3 = part2.OriginElements;
+            Reference catReference3 = (Reference)catOriginElements3.PlaneYZ;
+            stg_cat_ProfilMutterBohrung = catSketches3.Add(catReference3);
+
+            // Achsensystem in Skizze erstellen 
+            ErzeugeAchsensystemY();
+
+            Factory2D catFaca = stg_cat_ProfilMutterBohrung.OpenEdition();
+
+            Point2D Mittelpunkt = catFaca.CreatePoint(0, 0);
+            Circle2D KopfSkizze = catFaca.CreateCircle(0, 0, mutterdurchmesser/2, 0, 0);
+
+            stg_cat_ProfilMutterBohrung.CloseEdition();
+            part2.InWorkObject = part2.MainBody;
+
+            SF2D = (ShapeFactory)part2.ShapeFactory;
+
+            Pocket catMutterBohrung = SF2D.AddNewPocket(stg_cat_ProfilMutterBohrung, mutterhöhe);
+            catMutterBohrung.DirectionOrientation = CatPrismOrientation.catInverseOrientation;
+            catMutterBohrung.set_Name("Mutter Bohrung");
+
+            part2.Update();
+        }
+        #endregion
+
+        #endregion
+
+
+
 
 
     }
@@ -1269,3 +1629,4 @@ namespace Schraubenprogramm
 
 
 
+#endregion
