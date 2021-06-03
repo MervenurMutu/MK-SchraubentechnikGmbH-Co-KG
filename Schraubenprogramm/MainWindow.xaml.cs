@@ -2012,8 +2012,14 @@ namespace Schraubenprogramm
 
         //Catia Anbindung für Normteile
         #region Normteile
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click_Normteil(object sender, RoutedEventArgs e)
         {
+            MessageBoxResult result = MessageBox.Show("Als Set erzeugen?", "", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            
+            if(result == MessageBoxResult.Yes)
+            {
+
+               
             int zahler = 0;
 
             if (Convert.ToDouble(cb_NT_Gewindegröße.Text) == 4)
@@ -2054,40 +2060,47 @@ namespace Schraubenprogramm
             }
 
 
-            if (lb_Item_Sechkant.IsSelected == true)
-            {
-                double[,] Normtabelle = new double[11, 5];
+                if (lb_Item_Sechkant.IsSelected == true)
+                {
+                    double[,] Normtabelle = new double[11, 5];
 
 
-                //Bezeichnung           // Kopfgröße             //Kerndurchmesser      //Schlüsselweite          //Kopfhöhe
-                Normtabelle[0, 0] = 4; Normtabelle[0, 1] = 7.7; Normtabelle[0, 2] = 3.40; Normtabelle[0, 3] = 7; Normtabelle[0, 4] = 2.8;
-                Normtabelle[1, 0] = 6; Normtabelle[1, 1] = 11.1; Normtabelle[1, 2] = 5.07; Normtabelle[1, 3] = 10; Normtabelle[1, 4] = 4;
-                Normtabelle[2, 0] = 8; Normtabelle[2, 1] = 14.4; Normtabelle[2, 2] = 6.82; Normtabelle[2, 3] = 13; Normtabelle[2, 4] = 5.3;
-                Normtabelle[3, 0] = 10; Normtabelle[3, 1] = 18.9; Normtabelle[3, 2] = 8.56; Normtabelle[3, 3] = 17; Normtabelle[3, 4] = 6.4;
-                Normtabelle[4, 0] = 12; Normtabelle[4, 1] = 21.1; Normtabelle[4, 2] = 10.32; Normtabelle[4, 3] = 19; Normtabelle[4, 4] = 7.5;
-                Normtabelle[5, 0] = 14; Normtabelle[5, 1] = 24.5; Normtabelle[5, 2] = 12.07; Normtabelle[5, 3] = 21; Normtabelle[5, 4] = 8.8;
-                Normtabelle[6, 0] = 16; Normtabelle[6, 1] = 26.8; Normtabelle[6, 2] = 14.08; Normtabelle[6, 3] = 24; Normtabelle[6, 4] = 10;
+                    //Bezeichnung           // Kopfgröße             //Kerndurchmesser      //Schlüsselweite          //Kopfhöhe
+                    Normtabelle[0, 0] = 4; Normtabelle[0, 1] = 7.7; Normtabelle[0, 2] = 3.40; Normtabelle[0, 3] = 7; Normtabelle[0, 4] = 2.8;
+                    Normtabelle[1, 0] = 6; Normtabelle[1, 1] = 11.1; Normtabelle[1, 2] = 5.07; Normtabelle[1, 3] = 10; Normtabelle[1, 4] = 4;
+                    Normtabelle[2, 0] = 8; Normtabelle[2, 1] = 14.4; Normtabelle[2, 2] = 6.82; Normtabelle[2, 3] = 13; Normtabelle[2, 4] = 5.3;
+                    Normtabelle[3, 0] = 10; Normtabelle[3, 1] = 18.9; Normtabelle[3, 2] = 8.56; Normtabelle[3, 3] = 17; Normtabelle[3, 4] = 6.4;
+                    Normtabelle[4, 0] = 12; Normtabelle[4, 1] = 21.1; Normtabelle[4, 2] = 10.32; Normtabelle[4, 3] = 19; Normtabelle[4, 4] = 7.5;
+                    Normtabelle[5, 0] = 14; Normtabelle[5, 1] = 24.5; Normtabelle[5, 2] = 12.07; Normtabelle[5, 3] = 21; Normtabelle[5, 4] = 8.8;
+                    Normtabelle[6, 0] = 16; Normtabelle[6, 1] = 26.8; Normtabelle[6, 2] = 14.08; Normtabelle[6, 3] = 24; Normtabelle[6, 4] = 10;
 
-                Normtabelle[7, 0] = 20; Normtabelle[7, 1] = 33.5; Normtabelle[7, 2] = 17.57; Normtabelle[7, 3] = 30; Normtabelle[7, 4] = 12.5;
+                    Normtabelle[7, 0] = 20; Normtabelle[7, 1] = 33.5; Normtabelle[7, 2] = 17.57; Normtabelle[7, 3] = 30; Normtabelle[7, 4] = 12.5;
 
-                Normtabelle[8, 0] = 24; Normtabelle[8, 1] = 40.0; Normtabelle[8, 2] = 21.07; Normtabelle[8, 3] = 36; Normtabelle[8, 4] = 15;
+                    Normtabelle[8, 0] = 24; Normtabelle[8, 1] = 40.0; Normtabelle[8, 2] = 21.07; Normtabelle[8, 3] = 36; Normtabelle[8, 4] = 15;
 
-                double gewindelänge = Convert.ToDouble(tb_NT_Länge.Text);
-                double kopfgöße = Normtabelle[zahler, 1];
-                double gewindedurchmesser = Normtabelle[zahler, 2];
-                double schlüsselweite = Normtabelle[zahler, 3];
-                double kopfhöhe = Normtabelle[zahler, 4];
+                    double gewindelänge = Convert.ToDouble(tb_NT_Länge.Text);
+                    double kopfgöße = Normtabelle[zahler, 1];
+                    double gewindedurchmesser = Normtabelle[zahler, 2];
+                    double schlüsselweite = Normtabelle[zahler, 3];
+                    double kopfhöhe = Normtabelle[zahler, 4];
 
-                CatiaControl cc = new CatiaControl();
+                    CatiaControl cc = new CatiaControl();
 
-                //Läuft Catia ? 
-                cc.CatiaLäuft();
+                    //Läuft Catia ? 
+                    cc.CatiaLäuft();
 
-                cc.ErzeugeProduct(gewindedurchmesser, gewindelänge, schlüsselweite, kopfhöhe);
+                    try
+                    {
+                        cc.ErzeugeProduct(gewindedurchmesser, gewindelänge, schlüsselweite, kopfhöhe);
 
-                cc.ErzeugeProductTeil2(schlüsselweite, kopfhöhe, gewindedurchmesser);
-
-
+                        cc.ErzeugeProductTeil2(schlüsselweite, kopfhöhe, gewindedurchmesser);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Produkt konnte nicht erzeugt werden. Bitte geladenenes Produkt schließen");
+                        return;
+                    }
+                }
             }
             #endregion
 
@@ -2294,6 +2307,11 @@ namespace Schraubenprogramm
                 this.artikelnummer = Artikelnummer;
                 this.einzelpreis = Einzelpreis;
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
